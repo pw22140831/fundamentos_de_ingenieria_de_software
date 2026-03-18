@@ -1,0 +1,93 @@
+//www.plantuml.com/plantuml/png/ZLHDSnGX4BtpAt1FQcfJUjto45tBCYUjg3-W5zfDAmDJ3QmLF_wxFJiB35icyJOy7lqUh-cvYWauvS6f9-aM1zG7sZ7uf18bX_ejmPvX06rHRnr4Z7gjtxXWlc-3HQMCO55_YHcOWlwbj5wJtMZoQVhqOTWnRiCmEanXesDYyljfnmHcx91H2lq8R9SO1xTONf0dGy2VC5BmJv-fFqN_jHraJuXW0nzTN33kZm2Vl0bTK8Yqzy0tmSrhnaCmY_KUFRAiSGoSC1Om9X44_iZXW2WI69Vg7qRyb_1d1X_163bwLkVQ7z2dvie47xDB_KQhBuLsyErH1U6NFhpwlLxteVHRnN6FDfsYB1U-GvDgOylwhC5Top2EGLpjN0T_HNCBrrF_vB25X1LyHxuXenpFOyQO9bh8KkKO43YJtTGNIMT7ZYpOBg4MHB6wWAhRH6Ftv8RWgquprDnOZ8Pfd6kqPtY0oG3F1afIvMaK_Geya9KHVP0ubyNHKW9UNguzYbAx8MV5Rz1aZlsWWKzJN9M9CO7j9CL21aS_WRSdSZTRMHm59YZg5QWbIyndxNuV-1HceW7dm6rsJLiqwWjRlLnfUOEh5vUNprTTGpTwoedGuptiPKAJ9-FotRtSyk8tUluNABNKcac5BWTRNwS3mP1afw5DMbUyPINi-LUYL9cr1szOHbgL6VnVlkgc_EnCZM2Zox_dCNwxREMfA_Gs3-ul
+
+@startuml
+!theme vibrant
+title Diagrama de Clases - BlockCode
+
+class Usuario {
+  -id: int
+  -nombreCompleto: string
+  -correo: string
+  -password: string
+  -rol: string
+  +iniciarSesion()
+}
+
+class Administrador {
+  +registrarUsuario()
+  +asignarRol()
+  +revocarRol()
+  +generarReportes()
+  +gestionarProveedores()
+}
+
+class Operador {
+  +registrarTransaccion()
+  +gestionarInventario()
+  +consultarInventario()
+}
+
+class Trabajador {
+  +registrarTransaccion()
+}
+
+Usuario <|-- Administrador
+Usuario <|-- Operador
+Usuario <|-- Trabajador
+
+class Proyecto {
+  -idProyecto: int
+  -nombre: string
+  -responsable: string
+  -fechaInicio: date
+  -fechaFin: date
+  -presupuesto: double
+  +calcularRentabilidad()
+}
+
+class Transaccion {
+  -idTransaccion: int
+  -tipo: string
+  -monto: double
+  -fecha: date
+  -descripcion: string
+  +validar()
+}
+
+
+class Proveedor {
+  -idProveedor: int
+  -nombre: string
+  -contacto: string
+  +editar()
+}
+
+class Inventario {
+  -idInventario: int
+  -nombreRecurso: string
+  -cantidad: int
+  -estado: string
+  +actualizarCantidad()
+}
+
+class Auditoria {
+  -idAuditoria: int
+  -accion: string
+  -fechaHora: datetime
+  -modulo: string
+}
+
+Proyecto "1" -- "0..*" Transaccion : contiene
+Proyecto "1" -- "0..*" Inventario : incluye
+Proyecto "1" -- "0..*" Usuario : asigna
+
+Transaccion "0..*" -- "0..1" Proveedor : asociado a
+
+Usuario "1" -- "0..*" Auditoria : genera
+
+Operador "1" -- "0..*" Transaccion : registra
+Trabajador "1" -- "0..*" Transaccion : registra
+
+Administrador "1" -- "0..*" Proyecto : gestiona
+Administrador "1" -- "0..*" Proveedor : administra
+@enduml
