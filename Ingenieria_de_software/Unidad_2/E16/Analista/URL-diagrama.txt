@@ -1,0 +1,61 @@
+//www.plantuml.com/plantuml/png/VLHTJXj137wVKunuvm8LGj0WLKYjg0BXjN9cp6AOZ5SURrfQzKXzwX6uM7StXCpMITwIxsS_n_us5qL1j5ibb_11lR8NQXxLHn8CIfoTaYRqLmIDm0fyH3-3mcNui2ZiJ_qj5SMU-PWuF0UEw1m4PV6NSKMv9mKYonjsqsBzzKvW2KyZu8P0o4r2Vs8UUU9_EUTzLp10wGNNcGA1-8A5Nl_c4m_5BsRVFdD3kTRDiHa7a1xgG8YtoWs1iYWejU6oK9DxkN3QIY_BWCqvuVJ9QmvJuG0zuoZSFqCh_891pH1VXPzwl3RTK-aWqS_11HdJiEx0MQkuUyBlLr0UbmmI3oIgG2uGGhsaRUhTXXkFN2VtiV60TSCfrjRQ-mdBWFLkoclCMc_y2sHey7h4MLvgsunpwP8Qs_PNxapxmrhXDM9amJ9Dk-tQDX5A-S-OSLYEOCkYEyy6LvoFU9bC22bqQVHaXIKDQuXRtnkfsD_nWVJ0AQ2Bf2olV-2zM0FILzQvtyvDNXP_Udg-wxEXJ86jOjfRoq_hQddRJYko9RGIkzRz8dElcnRjAWngksmqfdWJtZPiyvTaeWs-Fzpjnz-px0laF_YpCyeXTH7FpvrTsEYrDRE-kXAs15FziK7hReuk_A6OemqvBhPNFQvt5vXZjqh_0000
+
+@startuml
+left to right direction
+title Diagrama de Casos de Uso - Sistema Blockcode
+
+actor Administrador
+actor Operador
+actor Trabajador
+
+rectangle "Sistema Blockcode" {
+
+  usecase "Iniciar sesión" as UC_Login
+  usecase "Registrar usuario" as UC_RegisterUser
+  usecase "Asignar rol" as UC_AssignRole
+  usecase "Revocar rol" as UC_RevokeRole
+
+  usecase "Registrar proyecto" as UC_RegisterProject
+  usecase "Visualizar panel de control" as UC_ViewDashboard
+
+  usecase "Registrar transacción" as UC_RegisterTransaction
+  usecase "Validar transacción" as UC_ValidateTransaction
+
+  usecase "Gestionar inventario" as UC_ManageInventory
+  usecase "Consultar inventario" as UC_ViewInventory
+
+  usecase "Gestionar proveedores" as UC_ManageSuppliers
+
+  usecase "Generar reportes" as UC_GenerateReports
+  usecase "Calcular rentabilidad" as UC_CalculateProfit
+
+  usecase "Registrar auditoría" as UC_AuditLog
+
+}
+
+Administrador --> UC_Login
+Administrador --> UC_RegisterUser
+Administrador --> UC_AssignRole
+Administrador --> UC_RevokeRole
+Administrador --> UC_RegisterProject
+Administrador --> UC_ViewDashboard
+Administrador --> UC_GenerateReports
+Administrador --> UC_ManageSuppliers
+
+Operador --> UC_Login
+Operador --> UC_RegisterTransaction
+Operador --> UC_ManageInventory
+Operador --> UC_ViewInventory
+
+Trabajador --> UC_Login
+Trabajador --> UC_RegisterTransaction
+
+UC_RegisterTransaction --> UC_ValidateTransaction : <<include>>
+UC_GenerateReports --> UC_CalculateProfit : <<include>>
+UC_RegisterUser --> UC_AssignRole : <<include>>
+
+UC_RegisterTransaction --> UC_AuditLog : <<extend>>
+UC_RegisterUser --> UC_AuditLog : <<extend>>
+UC_ManageSuppliers --> UC_AuditLog : <<extend>>
+
+@enduml
