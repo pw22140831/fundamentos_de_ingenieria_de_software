@@ -1,0 +1,87 @@
+//www.plantuml.com/plantuml/png/ZLF1Rjim3BtxAtGV_0D3KRGx31Y60K7NdGDMObDYigXHL8UYwRzFpbmwXfCYby1vUXGV-PvkYe9e7MAdf17T3muOsTrX14-S8BhU_QIYE83x4jd_zetGTPWQ_SNzAXM4sBrspdsYiAtJ_y-Eahghgyttw-jsrFVj9_7m8BZrFEI8EdAA2gLTE_8iWZFI2ckYFnKFnHbA-SiIZWjQA-5eRRwERTvCrHr7KsIqashcE-VgZV0BUfs7oXDmqJtE2PRCgS13NC2Fw9zWIudyOJy150rzf3H3MR3KNB7eWOUU1eYcptQ-dNMkbszRMOrmUcFt0asn7nstwtJ6Jawkb1Sc3fmMYgVXvi425Y-KfmkjxgmyvyuCPKNFY87bt50R8vYJXbncfUUau9LFnUHRUcvVY_IJGHyz045VfIpp3qafGFXVrW0i2c51kS34snf8MGXC41YoqlFXTitr8tD3ZRpEynFBkyDA0uvgfdowD-xx_NvyZ8sGKHGJUfpFz_k-vzTLdBlfupnXnRXV97KqZJ3Xej6A9RYZeW9TPp4vJSmWIfuohFlE4HXvN70ztUsH0pjCE3QymHJg4Fy1
+
+@startuml
+title Modelo Relacional - Sistema Blockcode
+
+entity Usuario {
+  +id_usuario : int <<PK>>
+  --
+  nombre_completo : string
+  correo : string <<unique>>
+  password : string
+  id_rol : int <<FK>>
+}
+
+entity Rol {
+  +id_rol : int <<PK>>
+  --
+  nombre : string
+}
+
+entity Proyecto {
+  +id_proyecto : int <<PK>>
+  --
+  nombre : string
+  responsable : string
+  fecha_inicio : date
+  fecha_fin : date
+  presupuesto : decimal
+}
+
+entity Usuario_Proyecto {
+  +id_usuario : int <<FK>>
+  +id_proyecto : int <<FK>>
+}
+
+entity Transaccion {
+  +id_transaccion : int <<PK>>
+  --
+  tipo : string
+  monto : decimal
+  fecha : date
+  descripcion : string
+  id_proyecto : int <<FK>>
+  id_usuario : int <<FK>>
+  id_proveedor : int <<FK>>
+}
+
+entity Proveedor {
+  +id_proveedor : int <<PK>>
+  --
+  nombre : string
+  contacto : string
+}
+
+entity Inventario {
+  +id_inventario : int <<PK>>
+  --
+  nombre_recurso : string
+  cantidad : int
+  estado : string
+  id_proyecto : int <<FK>>
+}
+
+entity Auditoria {
+  +id_auditoria : int <<PK>>
+  --
+  id_usuario : int <<FK>>
+  accion : string
+  modulo : string
+  fecha_hora : datetime
+}
+
+Usuario }o--|| Rol : pertenece
+
+Usuario ||--o{ Usuario_Proyecto
+Proyecto ||--o{ Usuario_Proyecto
+
+Proyecto ||--o{ Transaccion : contiene
+Usuario ||--o{ Transaccion : registra
+
+Proveedor ||--o{ Transaccion : participa
+
+Proyecto ||--o{ Inventario : posee
+
+Usuario ||--o{ Auditoria : genera
+
+@enduml
