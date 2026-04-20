@@ -9,8 +9,13 @@ include(__DIR__ . "/../config/database.php");
 $query = "SELECT * FROM users ORDER BY id DESC";
 $result = pg_query($conn, $query);
 
-$users = [];
+if (!$result) {
+    http_response_code(500);
+    echo json_encode(['error' => pg_last_error($conn)]);
+    exit();
+}
 
+$users = [];
 while ($row = pg_fetch_assoc($result)) {
     $users[] = $row;
 }
