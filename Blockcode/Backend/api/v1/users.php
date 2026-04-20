@@ -6,7 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 include(__DIR__ . "/../config/database.php");
 
-$query = "SELECT * FROM users ORDER BY id DESC";
+$query = "SELECT * FROM usuarios ORDER BY id DESC";
 $result = pg_query($conn, $query);
 
 if (!$result) {
