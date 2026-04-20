@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { API_BASE } from '../config';
 
 export default function ListUser() {
     
@@ -10,7 +11,7 @@ export default function ListUser() {
     }, []);
 
     function getUsers() {
-        axios.get('http://localhost:8080/api/users.php')
+        axios.get(`${API_BASE}/users.php`)
             .then(function(response){
                 console.log(response.data); // 👈 CLAVE
                 setUsers(response.data);

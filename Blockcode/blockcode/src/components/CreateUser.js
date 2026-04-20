@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from '../config';
 
 export default function ListUsers() {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function ListUsers() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.post('http://localhost:8080/api/users/save.php', inputs).then(function(response){
+        axios.post(`${API_BASE}/users/save.php`, inputs).then(function(response){
             console.log(response.data);
             navigate('/');
         });
