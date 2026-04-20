@@ -1,9 +1,9 @@
 <?php
 $host = "localhost";
 $port = "5432";
-$dbname ="Blockcode";
-$user = "postgres";
-$password = "halo.666";
+$dbname ="my_app";
+$user = "my_app_role";
+$password = "some_password";
 
 $conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
 
