@@ -6,26 +6,36 @@ import EditUser from './components/EditUser';
 
 function App() {
   return (
-    <div className="App">
-      <h5>Welcome to Blockcode</h5>
-      <BrowserRouter>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">List User</Link>
-            </li>
-            <li>
-              <Link to="user/create">Create User</Link>
-            </li>
-          </ul>
-        </nav>
-        <Routes>
-          <Route index element={<ListUser />}/>
-          <Route path="user/create" element={<CreateUser />}/>  
-          <Route path="user/:id/edit" element={<EditUser />}/>
-        </Routes>
-      </BrowserRouter>
-      </div>
+  <div className="App">
+      {/* Encabezado */}
+      <header className="App-header">
+        <h1>Blockcode</h1>
+        <div className="logo-space">
+          <img src="logo.jpeg" alt="Logo Blockcode" />
+        </div>
+      </header>
+
+      {/* Login */}
+      <main className="App-main">
+        <h2>Login</h2>
+        <form className="login-form">
+          <label>
+            Username:
+            <input type="text" name="username" />
+          </label>
+          <label>
+            Password:
+            <input type="password" name="password" />
+          </label>
+          <button type="submit">Ingresar</button>
+        </form>
+      </main>
+
+      {/* Footer */}
+      <footer className="App-footer">
+        <p>© 2026 Blockcode - Todos los derechos reservados</p>
+      </footer>
+    </div>
   );
 }
 

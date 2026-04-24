@@ -11,11 +11,11 @@ export default function ListUser() {
     }, []);
 
     function getUsers() {
-        axios.get(`${API_BASE}/users.php`)
-            .then(function(response){
-                console.log(response.data); // 👈 CLAVE
-                setUsers(response.data);
-            });
+        //axios.get(`${API_BASE}/users.php`)
+           // .then(function(response){
+            //    console.log(response.data); // 👈 CLAVE
+            //    setUsers(response.data);
+          //  });
     }
 
     return (
