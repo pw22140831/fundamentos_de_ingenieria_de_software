@@ -1,0 +1,17 @@
+{
+    "name": "cruzb/backend",
+    "autoload": {
+        "psr-4": {
+            "Cruzb\\Backend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "RSNezuko",
+            "email": "l22140812@queretaro.tecnm.mx"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-// Cargar variables de entorno desde Backend/api/.env
+// Cargar variables de entorno
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
@@ -11,10 +11,20 @@ $dbname   = $_ENV['DB_NAME'];
 $user     = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASS'];
 
-$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
+try {
+    $conn = new PDO(
+        "pgsql:host=$host;port=$port;dbname=$dbname",
+        $user,
+        $password
+    );
 
-if (!$conn) {
-    echo json_encode(["error" => "DB connection failed"]);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+} catch (PDOException $e) {
+    echo json_encode([
+        "error" => "DB connection failed",
+        "details" => $e->getMessage()
+    ]);
     exit;
 }
 ?>
