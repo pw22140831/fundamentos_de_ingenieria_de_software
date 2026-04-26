@@ -99,7 +99,7 @@ Se agregan vistas.
 
 ---
 
-### Paso 3
+### Paso 4
 
 ```sql
 procedures.sql
