@@ -17,8 +17,8 @@ export default function Projects() {
 
   const [editing, setEditing] = useState(false);
 
-  //  CAMBIA AQUÍ
-  const USE_BACKEND = false;
+  //  BACKEDN
+  const USE_BACKEND = true;
 
   // =========================
   //  VIEW (GET)

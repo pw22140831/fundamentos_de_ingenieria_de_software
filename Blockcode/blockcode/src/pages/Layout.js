@@ -10,7 +10,7 @@ export default function Layout() {
       <Navbar />
 
       <main style={{ padding: "20px" }}>
-        <Outlet /> {/* aquí cambian las páginas */}
+        <Outlet /> {/*  cambian las páginas */}
       </main>
 
       <Footer />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE } from "../config/config";
+import "./ListUser.css";
 
 export default function Users() {
 
@@ -19,7 +20,7 @@ export default function Users() {
 
     const [editing, setEditing] = useState(false);
 
-    const USE_BACKEND = false;
+    const USE_BACKEND = true;
 
     //  usuario logueado (fake por ahora)
     const currentUser = JSON.parse(localStorage.getItem("user")) || { rol: 1 };
@@ -127,7 +128,7 @@ export default function Users() {
     // =====================
     const handleDelete = async (user) => {
 
-        // 🚫 operador solo elimina básicos
+        //  operador solo elimina básicos
         if (isOperador && user.id_rol != 3) {
             alert("Solo puedes eliminar usuarios básicos");
             return;
@@ -169,12 +170,12 @@ export default function Users() {
     };
 
     return (
-        <div>
+        <div className="users-container">
             <h2>Users</h2>
 
             {/* FORM */}
             {(isAdmin || isOperador) && (
-                <div>
+                <div className="users-form">
                     <input name="nombre" placeholder="Name" onChange={handleChange} />
                     <input name="apellido_paterno" placeholder="Last Name" onChange={handleChange} />
                     <input name="apellido_materno" placeholder="Second Last Name" onChange={handleChange} />
@@ -194,15 +195,19 @@ export default function Users() {
                     </select>
 
                     {editing ? (
-                        <button onClick={handleUpdate}>Update</button>
+                        <button className="btn-edit" onClick={handleUpdate}>
+                            Update
+                        </button>
                     ) : (
-                        <button onClick={handleCreate}>Create</button>
+                        <button className="btn-create" onClick={handleCreate}>
+                            Create
+                        </button>
                     )}
                 </div>
             )}
 
             {/* TABLE */}
-            <table>
+            <table className="users-table">
                 <thead>
                     <tr>
                         <th>Name</th>
