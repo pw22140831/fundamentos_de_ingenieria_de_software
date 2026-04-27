@@ -131,3 +131,25 @@
     font-size: 0.9rem;
   }
 }
+.message-box {
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* ERROR */
+.message-box.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* SUCCESS */
+.message-box.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+.error-input {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}

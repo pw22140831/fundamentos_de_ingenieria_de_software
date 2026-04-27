@@ -4,9 +4,12 @@ import { API_BASE } from "../config/config";
 import "./ListUser.css";
 
 export default function Users() {
-
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
+    const isEmpty = (value) => !value || value.trim() === "";
+    const [submitted, setSubmitted] = useState(false);
 
     const [form, setForm] = useState({
         id_usuario: "",
@@ -18,9 +21,29 @@ export default function Users() {
         id_rol: ""
     });
 
+    const validateForm = () => {
+        if (
+            !form.nombre ||
+            !form.apellido_paterno ||
+            !form.apellido_materno ||
+            !form.correo ||
+            !form.password ||
+            !form.id_rol
+        ) {
+            setMessage("Faltan datos obligatorios");
+            setMessageType("error");
+            setTimeout(() => {
+                setMessage("");
+                setMessageType("");
+            }, 3000);
+            return false;
+        }
+
+        return true;
+    };
     const [editing, setEditing] = useState(false);
 
-    const USE_BACKEND = true;
+    const USE_BACKEND = false;
 
     //  usuario logueado (fake por ahora)
     const currentUser = JSON.parse(localStorage.getItem("user")) || { rol: 1 };
@@ -75,6 +98,9 @@ export default function Users() {
     const handleCreate = async () => {
 
         //  operador solo puede crear usuarios básicos
+        setSubmitted(true);
+        if (!validateForm()) return;
+
         if (isOperador && form.id_rol != 3) {
             alert("Solo puedes crear usuarios básicos");
             return;
@@ -103,10 +129,13 @@ export default function Users() {
     // =====================
     const handleUpdate = async () => {
 
+
         if (!isAdmin) {
             alert("No tienes permisos");
             return;
         }
+        setSubmitted(true);
+        if (!validateForm()) return;
 
         if (USE_BACKEND) {
             await axios.post(`${API_BASE}/users/update.php`, form);
@@ -176,11 +205,11 @@ export default function Users() {
             {/* FORM */}
             {(isAdmin || isOperador) && (
                 <div className="users-form">
-                    <input name="nombre" placeholder="Name" onChange={handleChange} />
-                    <input name="apellido_paterno" placeholder="Last Name" onChange={handleChange} />
-                    <input name="apellido_materno" placeholder="Second Last Name" onChange={handleChange} />
-                    <input name="correo" placeholder="Email" onChange={handleChange} />
-                    <input type="password" name="password" placeholder="Password" onChange={handleChange} />
+                    <input name="nombre" placeholder="Name" onChange={handleChange} className={submitted && isEmpty(form.nombre) ? "error-input" : ""} />
+                    <input name="apellido_paterno" placeholder="Last Name" onChange={handleChange} className={submitted && isEmpty(form.apellido_paterno) ? "error-input" : ""} />
+                    <input name="apellido_materno" placeholder="Second Last Name" onChange={handleChange} className={submitted && isEmpty(form.apellido_materno) ? "error-input" : ""} />
+                    <input name="correo" placeholder="Email" onChange={handleChange} className={submitted && isEmpty(form.correo) ? "error-input" : ""} />
+                    <input type="password" name="password" placeholder="Password" onChange={handleChange} className={submitted && isEmpty(form.password) ? "error-input" : ""} />
 
                     <select name="id_rol" onChange={handleChange}>
                         <option value="">Select Role</option>
@@ -205,7 +234,11 @@ export default function Users() {
                     )}
                 </div>
             )}
-
+            {message && (
+                <div className={`message-box ${messageType}`}>
+                    {message}
+                </div>
+            )}
             {/* TABLE */}
             <table className="users-table">
                 <thead>

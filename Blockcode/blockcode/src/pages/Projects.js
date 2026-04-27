@@ -4,8 +4,17 @@ import { API_BASE } from '../config/config';
 import "./Projects.css";
 
 export default function Projects() {
-
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
   const [projects, setProjects] = useState([]);
+  const isEmpty = (value) => !value || value.trim() === "";
+  const [submitted, setSubmitted] = useState(false);
+
+  const fetchProjects = async () => {
+    const res = await axios.get(`${API_BASE}/proyectos/index.php`);
+    setProjects(res.data);
+  };
+
   const [form, setForm] = useState({
     id_proyecto: "",
     nombre: "",
@@ -17,8 +26,25 @@ export default function Projects() {
 
   const [editing, setEditing] = useState(false);
 
+  const validateForm = () => {
+    if (
+      !form.nombre ||
+      !form.responsable ||
+      !form.fecha_inicio ||
+      !form.fecha_fin ||
+      !form.presupuesto
+    ) {
+      setMessage("Faltan datos obligatorios");
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+      return false;
+    }
+
+    return true;
+  };
   //  BACKEDN
-  const USE_BACKEND = true;
+  const USE_BACKEND = false;
 
   // =========================
   //  VIEW (GET)
@@ -54,29 +80,36 @@ export default function Projects() {
   //  CREATE
   // =========================
   const handleCreate = async () => {
-
+    setSubmitted(true);
+    if (!validateForm()) return;
     if (USE_BACKEND) {
       await axios.post(`${API_BASE}/proyectos/save.php`, form);
+      fetchProjects();
     } else {
       setProjects([...projects, { ...form, id_proyecto: Date.now() }]);
     }
-
+    setMessage(`Proyecto ${form.nombre} creado correctamente `);
+    setMessageType("success");
     resetForm();
+
   };
 
   // =========================
   //  UPDATE
   // =========================
   const handleUpdate = async () => {
-
+    setSubmitted(true);
+    if (!validateForm()) return;
     if (USE_BACKEND) {
       await axios.post(`${API_BASE}/proyectos/update.php`, form);
+      fetchProjects();
     } else {
       setProjects(projects.map(p =>
         p.id_proyecto === form.id_proyecto ? form : p
       ));
     }
-
+    setMessage(`Proyecto ${form.nombre} actualizado correctamente `);
+    setMessageType("success");
     resetForm();
   };
 
@@ -89,9 +122,12 @@ export default function Projects() {
       await axios.post(`${API_BASE}/proyectos/delete.php`, {
         id_proyecto: id
       });
+      fetchProjects();
     } else {
       setProjects(projects.filter(p => p.id_proyecto !== id));
     }
+    setMessage(`Proyecto ${form.nombre} eliminado correctamente `);
+    setMessageType("success");
   };
 
   // =========================
@@ -124,11 +160,11 @@ export default function Projects() {
 
       {/* FORM */}
       <div className="form">
-        <input name="nombre" placeholder="Name" onChange={handleChange} value={form.nombre} />
-        <input name="responsable" placeholder="Responsible" onChange={handleChange} value={form.responsable} />
-        <input type="date" name="fecha_inicio" onChange={handleChange} value={form.fecha_inicio} />
-        <input type="date" name="fecha_fin" onChange={handleChange} value={form.fecha_fin} />
-        <input name="presupuesto" placeholder="Budget" onChange={handleChange} value={form.presupuesto} />
+        <input name="nombre" placeholder="Name" onChange={handleChange} value={form.nombre} className={submitted && isEmpty(form.nombre) ? "error-input" : ""} />
+        <input name="responsable" placeholder="Responsible" onChange={handleChange} value={form.responsable} className={submitted && isEmpty(form.responsable) ? "error-input" : ""} />
+        <input type="date" name="fecha_inicio" onChange={handleChange} value={form.fecha_inicio} className={submitted && isEmpty(form.fecha_inicio) ? "error-input" : ""} />
+        <input type="date" name="fecha_fin" onChange={handleChange} value={form.fecha_fin} className={submitted && isEmpty(form.fecha_fin) ? "error-input" : ""} />
+        <input name="presupuesto" placeholder="Budget" onChange={handleChange} value={form.presupuesto} className={submitted && isEmpty(form.presupuesto) ? "error-input" : ""} />
 
         {editing ? (
           <button onClick={handleUpdate}>Update</button>
@@ -136,7 +172,11 @@ export default function Projects() {
           <button onClick={handleCreate}>Create</button>
         )}
       </div>
-
+      {message && (
+        <div className={`message-box ${messageType}`}>
+          {message}
+        </div>
+      )}
       {/* TABLE */}
       <table>
         <thead>
