@@ -1,0 +1,23 @@
+.App-header {
+    background-color: rgb(4, 4, 4);
+    padding: 20px;
+
+    display: flex;
+    justify-content: center;
+    /* centra todo horizontalmente */
+    align-items: center;
+    /* alinea verticalmente */
+
+    gap: 15px;
+    /* espacio entre logo y texto */
+}
+
+.App-header h1 {
+    color: rgb(66, 24, 194);
+    font-size: 3rem;
+    margin: 0;
+}
+
+.logo-space img {
+    height: 70px;
+}

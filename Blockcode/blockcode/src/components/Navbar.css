@@ -1,0 +1,28 @@
+.navbar {
+  display: flex;
+  justify-content: center;   /* 🔥 centrado */
+  gap: 30px;
+  padding: 15px;
+  background-color: #e0e0e0;
+}
+
+/* links normales */
+.navbar a {
+  text-decoration: none;
+  color: #555;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+/* hover */
+.navbar a:hover {
+  background-color: #d0d0d0;
+}
+
+/* 🔥 ACTIVO (azul rey) */
+.navbar a.active {
+  background-color: royalblue;
+  color: white;
+}

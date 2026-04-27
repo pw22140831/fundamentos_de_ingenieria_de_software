@@ -1,0 +1,72 @@
+/* CONTENEDOR PRINCIPAL */
+.App-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 80px;
+}
+
+/* TÍTULO */
+.App-main h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* FORMULARIO */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 300px;
+    /* 👈 mismo tamaño que tenías */
+}
+
+/* GRUPO */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* 👈 fuerza izquierda */
+    width: 100%;
+}
+
+/* LABEL (User / Password) */
+.form-group label {
+    font-size: 1.8rem;
+    /* 🔥 SOLO agranda la letra */
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%;
+}
+
+/* INPUT  */
+.login-form input {
+    padding: 8px;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+/* BOTÓN */
+.login-form button {
+    display: block;
+    margin: 25px auto;
+
+    width: 180px;
+    padding: 12px;
+
+    font-size: 1.1rem;
+
+    background-color: royalblue;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: navy;
+}
