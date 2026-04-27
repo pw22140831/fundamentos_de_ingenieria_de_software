@@ -1,14 +1,30 @@
 <?php
-$host = "localhost";
-$port = "5432";
-$dbname ="my_app";
-$user = "my_app_role";
-$password = "some_password";
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
+// Cargar variables de entorno
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
-if (!$conn) {
-    echo json_encode(["error" => "DB connection failed"]);
+$host     = $_ENV['DB_HOST'];
+$port     = $_ENV['DB_PORT'];
+$dbname   = $_ENV['DB_NAME'];
+$user     = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASS'];
+
+try {
+    $conn = new PDO(
+        "pgsql:host=$host;port=$port;dbname=$dbname",
+        $user,
+        $password
+    );
+
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+} catch (PDOException $e) {
+    echo json_encode([
+        "error" => "DB connection failed",
+        "details" => $e->getMessage()
+    ]);
     exit;
 }
 ?>
