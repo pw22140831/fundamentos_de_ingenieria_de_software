@@ -70,3 +70,7 @@ button {
   background-color: #d4edda;
   color: #155724;
 }
+.error-input {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
