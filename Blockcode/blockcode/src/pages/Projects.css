@@ -1,0 +1,54 @@
+.projects-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.projects-container h2 {
+  margin-bottom: 20px;
+}
+
+/* FORM */
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.form input {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.form button {
+  padding: 10px 20px;
+  background-color: royalblue;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #ddd;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+button {
+  margin: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
