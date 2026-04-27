@@ -151,6 +151,7 @@ export default function Projects() {
       presupuesto: ""
     });
     setEditing(false);
+    setSubmitted(false);
   };
 
   return (

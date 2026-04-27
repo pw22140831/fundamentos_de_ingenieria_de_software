@@ -120,7 +120,8 @@ export default function Users() {
                 }
             ]);
         }
-
+        setMessage(`Usuario ${form.nombre} creado correctamente `);
+        setMessageType("success");
         resetForm();
     };
 
@@ -148,7 +149,8 @@ export default function Users() {
                     : u
             ));
         }
-
+        setMessage(`Usuario ${form.nombre} actualizado correctamente `);
+        setMessageType("success");
         resetForm();
     };
 
@@ -170,6 +172,8 @@ export default function Users() {
         } else {
             setUsers(users.filter(u => u.id_usuario !== user.id_usuario));
         }
+        setMessage(`Usuario ${user.nombre} eliminado correctamente `);
+        setMessageType("success");
     };
 
     // =====================
@@ -196,6 +200,7 @@ export default function Users() {
             id_rol: ""
         });
         setEditing(false);
+        setSubmitted(false);
     };
 
     return (
@@ -205,11 +210,11 @@ export default function Users() {
             {/* FORM */}
             {(isAdmin || isOperador) && (
                 <div className="users-form">
-                    <input name="nombre" placeholder="Name" onChange={handleChange} className={submitted && isEmpty(form.nombre) ? "error-input" : ""} />
-                    <input name="apellido_paterno" placeholder="Last Name" onChange={handleChange} className={submitted && isEmpty(form.apellido_paterno) ? "error-input" : ""} />
-                    <input name="apellido_materno" placeholder="Second Last Name" onChange={handleChange} className={submitted && isEmpty(form.apellido_materno) ? "error-input" : ""} />
-                    <input name="correo" placeholder="Email" onChange={handleChange} className={submitted && isEmpty(form.correo) ? "error-input" : ""} />
-                    <input type="password" name="password" placeholder="Password" onChange={handleChange} className={submitted && isEmpty(form.password) ? "error-input" : ""} />
+                    <input name="nombre" placeholder="Name"  value={form.nombre} onChange={handleChange} className={submitted && isEmpty(form.nombre) ? "error-input" : ""} />
+                    <input name="apellido_paterno" placeholder="Last Name"  value={form.apellido_paterno} onChange={handleChange} className={submitted && isEmpty(form.apellido_paterno) ? "error-input" : ""} />
+                    <input name="apellido_materno" placeholder="Second Last Name"  value={form.apellido_materno} onChange={handleChange} className={submitted && isEmpty(form.apellido_materno) ? "error-input" : ""} />
+                    <input name="correo" placeholder="Email"  value={form.correo} onChange={handleChange} className={submitted && isEmpty(form.correo) ? "error-input" : ""} />
+                    <input type="password" name="password" placeholder="Password"  value={form.password} onChange={handleChange} className={submitted && isEmpty(form.password) ? "error-input" : ""} />
 
                     <select name="id_rol" onChange={handleChange}>
                         <option value="">Select Role</option>
