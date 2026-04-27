@@ -1,1 +1,1 @@
-export const API_BASE = 'http://app.blockcode.site:8000/api/v1';
+export const API_BASE = 'https://app.blockcode.site/api/v1';
