@@ -58,7 +58,7 @@ export default function Login() {
                 rol: 1
             }));
 
-            navigate("/dashboard/users");
+            navigate("/dashboard/projects");
 
         } else if (inputs.user === "operador" && inputs.password === "123") {
 
@@ -68,7 +68,7 @@ export default function Login() {
                 rol: 2
             }));
 
-            navigate("/dashboard/users");
+            navigate("/dashboard/projects");
 
         } else if (inputs.user === "usuario" && inputs.password === "123") {
 
