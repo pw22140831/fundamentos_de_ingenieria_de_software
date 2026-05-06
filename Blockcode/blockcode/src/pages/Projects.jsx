@@ -33,7 +33,7 @@ export default function Projects() {
     const [actionData, setActionData] = useState(null);
     const [actionType, setActionType] = useState("");
 
-    const USE_BACKEND = false;
+    const USE_BACKEND = true;
 
     const isEmpty = (v) => !v || v.trim() === "";
 

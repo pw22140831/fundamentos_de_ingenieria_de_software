@@ -38,7 +38,7 @@ export default function Users() {
     const [actionType, setActionType] = useState("");
     const [actionData, setActionData] = useState(null);
 
-    const USE_BACKEND = false;
+    const USE_BACKEND = true;
 
     const currentUser = JSON.parse(localStorage.getItem("user")) || { rol: 1 };
     const isAdmin = currentUser.rol === 1;
