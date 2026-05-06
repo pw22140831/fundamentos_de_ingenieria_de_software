@@ -23,6 +23,7 @@
   margin-bottom: 30px;
 }
 
+/* INPUTS */
 .users-form input,
 .users-form select {
   padding: 10px;
@@ -32,14 +33,14 @@
   font-size: 1rem;
 }
 
+/* FOCUS */
 .users-form input:focus,
 .users-form select:focus {
   outline: none;
   border-color: royalblue;
 }
 
-/* BOTONES FORM */
-
+/* BOTÓN */
 .users-form button {
   padding: 10px 20px;
   border: none;
@@ -65,14 +66,13 @@
 }
 
 .users-table thead {
-  background-color: royalblue;
-  color: rgb(93, 107, 209);
+  background-color: #ddd;
 }
 
 .users-table th,
 .users-table td {
   padding: 12px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
   text-align: center;
 }
 
@@ -81,7 +81,7 @@
 }
 
 /* ========================= */
-/* BOTONES DE ACCIONES */
+/* BOTONES */
 /* ========================= */
 
 .btn-edit {
@@ -91,11 +91,6 @@
   padding: 6px 12px;
   border-radius: 8px;
   cursor: pointer;
-  margin-right: 5px;
-}
-
-.btn-edit:hover {
-  background-color: darkorange;
 }
 
 .btn-delete {
@@ -107,8 +102,31 @@
   cursor: pointer;
 }
 
-.btn-delete:hover {
-  background-color: darkred;
+/* ========================= */
+/* MENSAJES */
+/* ========================= */
+
+.message-box {
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.message-box.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.message-box.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* INPUT ERROR */
+.error-input {
+  border: 2px solid red;
+  background-color: #ffe6e6;
 }
 
 /* ========================= */
@@ -116,7 +134,6 @@
 /* ========================= */
 
 @media (max-width: 768px) {
-
   .users-form {
     flex-direction: column;
     align-items: center;
@@ -126,30 +143,4 @@
   .users-form select {
     width: 90%;
   }
-
-  .users-table {
-    font-size: 0.9rem;
-  }
-}
-.message-box {
-  padding: 10px;
-  margin: 15px 0;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-/* ERROR */
-.message-box.error {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-/* SUCCESS */
-.message-box.success {
-  background-color: #d4edda;
-  color: #155724;
-}
-.error-input {
-  border: 2px solid red;
-  background-color: #ffe6e6;
 }
