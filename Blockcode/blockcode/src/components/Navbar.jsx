@@ -15,11 +15,11 @@ export default function Navbar() {
                 Proyectos
             </NavLink>
 
-            {(isAdmin || isOperador) && (
+            {/*{(isAdmin || isOperador) && (
                 <NavLink to="/dashboard/users" className="nav-link">
                     Usuarios
                 </NavLink>
-            )}
+            )}*/}
 
         </nav>
     );
