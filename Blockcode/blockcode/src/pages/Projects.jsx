@@ -260,8 +260,8 @@ export default function Projects() {
                     className={submitted && isEmpty(form.presupuesto) ? "error-input" : ""}
                 />
 
-                <button className="btn-create" onClick={handleCreateClick}>
-                    Create
+                <button className="btn-create" onClick={handleSaveClick}>
+                    {editing ? "Update" : "Create"}
                 </button>
 
             </div>

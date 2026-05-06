@@ -2,10 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE } from "../config/config";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Message from "../components/Message";
@@ -115,12 +111,12 @@ export default function Users() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // ===================== CREATE CLICK
-    const handleCreateClick = () => {
+    // ===================== SAVE (CREATE / UPDATE)
+    const handleSaveClick = () => {
         setSubmitted(true);
         if (!validateForm()) return;
 
-        setActionType("create");
+        setActionType(editing ? "update" : "create");
         setActionData(form);
         setShowConfirm(true);
     };
@@ -132,10 +128,18 @@ export default function Users() {
         setShowConfirm(true);
     };
 
+    // ===================== EDIT
+    const handleEdit = (user) => {
+        if (!isAdmin) return;
+        setForm(user);
+        setEditing(true);
+    };
+
     // ===================== CONFIRM ACTION
     const handleConfirm = async () => {
         setLoading(true);
 
+        // CREATE
         if (actionType === "create") {
 
             if (isOperador && actionData.id_rol != 3) {
@@ -163,6 +167,32 @@ export default function Users() {
             resetForm();
         }
 
+        // UPDATE
+        if (actionType === "update") {
+
+            if (!isAdmin) {
+                showMessage("No tienes permisos", "error");
+                setLoading(false);
+                return;
+            }
+
+            if (USE_BACKEND) {
+                await axios.post(`${API_BASE}/users/update.php`, actionData);
+            } else {
+                const role = roles.find(r => r.id_rol == actionData.id_rol);
+
+                setUsers(users.map(u =>
+                    u.id_usuario === actionData.id_usuario
+                        ? { ...actionData, rol_nombre: role?.nombre }
+                        : u
+                ));
+            }
+
+            showMessage(buildMessage("Usuario", actionData.nombre, "actualizado"), "success");
+            resetForm();
+        }
+
+        // DELETE
         if (actionType === "delete") {
 
             if (isOperador && actionData.id_rol != 3) {
@@ -186,13 +216,6 @@ export default function Users() {
         setLoading(false);
     };
 
-    // ===================== EDIT
-    const handleEdit = (user) => {
-        if (!isAdmin) return;
-        setForm(user);
-        setEditing(true);
-    };
-
     // ===================== RESET
     const resetForm = () => {
         setForm({
@@ -210,116 +233,119 @@ export default function Users() {
     };
 
     return (
-        <>
-            <div className="users-container">
+        <div className="users-container">
 
-                <h2>Users</h2>
+            <h2>{editing ? "Editando usuario" : "Users"}</h2>
 
-                {loading && <Loading />}
-                {message && <Message text={message} type={messageType} />}
+            {loading && <Loading />}
+            {message && <Message text={message} type={messageType} />}
 
-                {(isAdmin || isOperador) && (
-                    <div className="users-form">
+            {(isAdmin || isOperador) && (
+                <div className="users-form">
 
-                        <Input label="Name" name="nombre"
-                            value={form.nombre}
-                            onChange={handleChange}
-                            error={submitted && isEmpty(form.nombre)}
-                        />
-
-                        <Input label="Last Name" name="apellido_paterno"
-                            value={form.apellido_paterno}
-                            onChange={handleChange}
-                            error={submitted && isEmpty(form.apellido_paterno)}
-                        />
-
-                        <Input label="Second Last Name" name="apellido_materno"
-                            value={form.apellido_materno}
-                            onChange={handleChange}
-                            error={submitted && isEmpty(form.apellido_materno)}
-                        />
-
-                        <Input label="Email" name="correo"
-                            value={form.correo}
-                            onChange={handleChange}
-                            error={submitted && isEmpty(form.correo)}
-                        />
-
-                        <Input label="Password" type="password" name="password"
-                            value={form.password}
-                            onChange={handleChange}
-                            error={submitted && isEmpty(form.password)}
-                        />
-
-                        <select name="id_rol" value={form.id_rol} onChange={handleChange}>
-                            <option value="">Select Role</option>
-                            {roles
-                                .filter(r => isAdmin || r.id_rol == 3)
-                                .map(r => (
-                                    <option key={r.id_rol} value={r.id_rol}>
-                                        {r.nombre}
-                                    </option>
-                                ))}
-                        </select>
-
-                        <Button
-                            text={editing ? "Update" : "Create"}
-                            onClick={handleCreateClick}
-                            className={editing ? "btn-edit" : "btn-create"}
-                        />
-
-                    </div>
-                )}
-
-                <table className="users-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            {(isAdmin || isOperador) && <th>Actions</th>}
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {users.map(u => (
-                            <tr key={u.id_usuario}>
-                                <td>{u.nombre}</td>
-                                <td>{u.correo}</td>
-                                <td>{u.rol_nombre}</td>
-
-                                {(isAdmin || isOperador) && (
-                                    <td>
-                                        {isAdmin && (
-                                            <Button
-                                                text="Edit"
-                                                onClick={() => handleEdit(u)}
-                                                className="btn-edit"
-                                            />
-                                        )}
-
-                                        <Button
-                                            text="Delete"
-                                            onClick={() => handleDeleteClick(u)}
-                                            className="btn-delete"
-                                        />
-                                    </td>
-                                )}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                {showConfirm && (
-                    <ConfirmModal
-                        text={`¿Seguro que deseas ${actionType === "create" ? "crear" : "eliminar"} ${actionData?.nombre}?`}
-                        onConfirm={handleConfirm}
-                        onCancel={() => setShowConfirm(false)}
+                    <Input label="Name" name="nombre"
+                        value={form.nombre}
+                        onChange={handleChange}
+                        error={submitted && isEmpty(form.nombre)}
                     />
-                )}
 
-            </div>
+                    <Input label="Last Name" name="apellido_paterno"
+                        value={form.apellido_paterno}
+                        onChange={handleChange}
+                        error={submitted && isEmpty(form.apellido_paterno)}
+                    />
 
-        </>
+                    <Input label="Second Last Name" name="apellido_materno"
+                        value={form.apellido_materno}
+                        onChange={handleChange}
+                        error={submitted && isEmpty(form.apellido_materno)}
+                    />
+
+                    <Input label="Email" name="correo"
+                        value={form.correo}
+                        onChange={handleChange}
+                        error={submitted && isEmpty(form.correo)}
+                    />
+
+                    <Input label="Password" type="password" name="password"
+                        value={form.password}
+                        onChange={handleChange}
+                        error={submitted && isEmpty(form.password)}
+                    />
+
+                    <select name="id_rol" value={form.id_rol} onChange={handleChange}>
+                        <option value="">Select Role</option>
+                        {roles
+                            .filter(r => isAdmin || r.id_rol == 3)
+                            .map(r => (
+                                <option key={r.id_rol} value={r.id_rol}>
+                                    {r.nombre}
+                                </option>
+                            ))}
+                    </select>
+
+                    <Button
+                        text={editing ? "Update" : "Create"}
+                        onClick={handleSaveClick}
+                        className={editing ? "btn-edit" : "btn-create"}
+                    />
+
+                </div>
+            )}
+
+            <table className="users-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        {(isAdmin || isOperador) && <th>Actions</th>}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {users.map(u => (
+                        <tr key={u.id_usuario}>
+                            <td>{u.nombre}</td>
+                            <td>{u.correo}</td>
+                            <td>{u.rol_nombre}</td>
+
+                            {(isAdmin || isOperador) && (
+                                <td>
+                                    {isAdmin && (
+                                        <Button
+                                            text="Edit"
+                                            onClick={() => handleEdit(u)}
+                                            className="btn-edit"
+                                        />
+                                    )}
+
+                                    <Button
+                                        text="Delete"
+                                        onClick={() => handleDeleteClick(u)}
+                                        className="btn-delete"
+                                    />
+                                </td>
+                            )}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            {showConfirm && (
+                <ConfirmModal
+                    text={`¿Seguro que deseas ${
+                        actionType === "create"
+                            ? "crear"
+                            : actionType === "update"
+                            ? "actualizar"
+                            : "eliminar"
+                    } el usuario "${actionData?.nombre}"?`}
+                    onConfirm={handleConfirm}
+                    onCancel={() => setShowConfirm(false)}
+                />
+            )}
+
+        </div>
     );
 }
