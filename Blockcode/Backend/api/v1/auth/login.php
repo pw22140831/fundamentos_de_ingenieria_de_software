@@ -47,7 +47,7 @@ if (!password_verify($password, $user["password_hash"])) {
 $payload = [
     "id_usuario" => $user["id_usuario"],
     "correo" => $user["correo"],
-    "rol" => $user["id_rol"],
+    "id_rol" => $user["id_rol"],
     "exp" => time() + 3600
 ];
 
