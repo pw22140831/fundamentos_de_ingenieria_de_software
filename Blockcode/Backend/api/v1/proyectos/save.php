@@ -5,14 +5,11 @@ include("../../config/database.php");
 $data = json_decode(file_get_contents("php://input"), true);
 
 require_once "../../middleware/auth.php";
-$usuario = $GLOBALS['auth_user'];
-$idUsuario = $usuario->id_usuario;
+require_once "../../utils/setAuditUser.php";
 
 $conn->beginTransaction();
 
-$conn->exec("
-    SET app.current_user = '$idUsuario'
-");
+setAuditUser($conn);
 
 $query = "CALL sp_insertar_proyecto(:nombre, :responsable, :inicio, :fin, :presupuesto)";
 $stmt = $conn->prepare($query);

@@ -26,7 +26,7 @@ BEGIN
             NEW.nombre,
             NEW.is_active,
             'A',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -48,7 +48,7 @@ BEGIN
             NEW.nombre,
             NEW.is_active,
             'C',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -70,7 +70,7 @@ BEGIN
             OLD.nombre,
             OLD.is_active,
             'B',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN OLD;
@@ -134,7 +134,7 @@ BEGIN
             NEW.fecha_creacion,
             NEW.activo,
             'A',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -168,7 +168,7 @@ BEGIN
             NEW.fecha_creacion,
             NEW.activo,
             'C',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -202,7 +202,7 @@ BEGIN
             OLD.fecha_creacion,
             OLD.activo,
             'B',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN OLD;
@@ -264,7 +264,7 @@ BEGIN
             NEW.fecha_creacion,
             NEW.is_active,
             'A',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -296,7 +296,7 @@ BEGIN
             NEW.fecha_creacion,
             NEW.is_active,
             'C',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -328,7 +328,7 @@ BEGIN
             OLD.fecha_creacion,
             OLD.is_active,
             'B',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN OLD;
@@ -384,7 +384,7 @@ BEGIN
             NEW.fecha_creacion,
             NEW.is_active,
             'A',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -414,7 +414,7 @@ BEGIN
             NEW.fecha_creacion,
             NEW.is_active,
             'C',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -444,7 +444,7 @@ BEGIN
             OLD.fecha_creacion,
             OLD.is_active,
             'B',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN OLD;
@@ -505,7 +505,7 @@ BEGIN
             NEW.fecha_actualizacion,
             NEW.is_active,
             'A',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -535,7 +535,7 @@ BEGIN
             NEW.fecha_actualizacion,
             NEW.is_active,
             'C',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -565,7 +565,7 @@ BEGIN
             OLD.fecha_actualizacion,
             OLD.is_active,
             'B',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN OLD;
@@ -632,7 +632,7 @@ BEGIN
             NEW.fecha_registro,
             NEW.is_active,
             'A',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -668,7 +668,7 @@ BEGIN
             NEW.fecha_registro,
             NEW.is_active,
             'C',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -704,7 +704,7 @@ BEGIN
             OLD.fecha_registro,
             OLD.is_active,
             'B',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN OLD;
@@ -756,7 +756,7 @@ BEGIN
             NEW.fecha_asignacion,
             NEW.is_active,
             'A',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -782,7 +782,7 @@ BEGIN
             NEW.fecha_asignacion,
             NEW.is_active,
             'C',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN NEW;
@@ -808,7 +808,7 @@ BEGIN
             OLD.fecha_asignacion,
             OLD.is_active,
             'B',
-            current_setting('app.current_user', true)::INT
+            current_setting('audit.user_id', true)::INT
         );
 
         RETURN OLD;
