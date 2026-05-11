@@ -27,6 +27,8 @@ try {
         new Key($_ENV["JWT_SECRET"], 'HS256')
     );
 
+    $GLOBALS['auth_user'] = $decoded;
+
 } catch (Exception $e) {
 
     http_response_code(401);
