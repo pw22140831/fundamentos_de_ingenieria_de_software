@@ -11,6 +11,7 @@ import Button from "../components/Button";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
 import ConfirmModal from "../components/ConfirmModal";
+import Table from "../components/Table";
 import { buildMessage } from "../utils/messageBuilder";
 
 import "./Projects.css";
@@ -228,6 +229,28 @@ export default function Projects() {
         setActionData(form);
         setShowConfirm(true);
     };
+
+    const columns = [
+        { key: 'nombre', label: 'Name' },
+        { key: 'responsable', label: 'Responsible' },
+        { key: 'fecha_inicio', label: 'Start' },
+        { key: 'fecha_fin', label: 'End' },
+        { key: 'presupuesto', label: 'Budget' }
+    ];
+
+    const actions = [
+        {
+            label: 'Edit',
+            className: 'btn-edit',
+            onClick: handleEdit
+        },
+        {
+            label: 'Delete',
+            className: 'btn-delete',
+            onClick: handleDeleteClick
+        }
+    ];
+
     return (
         <div className="projects-container">
 
@@ -291,45 +314,7 @@ export default function Projects() {
             </div>
 
             {/* TABLE */}
-            <table className="projects-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Responsible</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Budget</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {projects.map(p => (
-                        <tr key={p.id_proyecto}>
-                            <td>{p.nombre}</td>
-                            <td>{p.responsable}</td>
-                            <td>{p.fecha_inicio}</td>
-                            <td>{p.fecha_fin}</td>
-                            <td>{p.presupuesto}</td>
-                            <td>
-                                <button
-                                    className="btn-edit"
-                                    onClick={() => handleEdit(p)}
-                                >
-                                    Edit
-                                </button>
-
-                                <button
-                                    className="btn-delete"
-                                    onClick={() => handleDeleteClick(p)}
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <Table data={projects} columns={columns} actions={actions} />
 
             {/* MODAL */}
             {showConfirm && (

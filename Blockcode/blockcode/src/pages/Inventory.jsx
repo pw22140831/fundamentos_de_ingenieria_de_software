@@ -12,6 +12,7 @@ import Button from "../components/Button";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
 import ConfirmModal from "../components/ConfirmModal";
+import Table from "../components/Table";
 
 import { buildMessage } from "../utils/messageBuilder";
 
@@ -456,6 +457,27 @@ const resetForm = () => {
     setSubmitted(false);
 };
 
+const columns = [
+    { key: 'proyecto', label: 'Project' },
+    { key: 'nombre_recurso', label: 'Resource' },
+    { key: 'cantidad', label: 'Quantity' },
+    { key: 'estado', label: 'Status' },
+    { key: 'fecha_actualizacion', label: 'Updated' }
+];
+
+const actions = [
+    {
+        label: 'Edit',
+        className: 'btn-edit',
+        onClick: handleEdit
+    },
+    {
+        label: 'Delete',
+        className: 'btn-delete',
+        onClick: handleDeleteClick
+    }
+];
+
 return (
 
     <div className="inventory-container">
@@ -555,80 +577,7 @@ return (
 
         </div>
 
-        <table className="inventory-table">
-
-            <thead>
-
-                <tr>
-
-                    <th>Project</th>
-                    <th>Resource</th>
-                    <th>Quantity</th>
-                    <th>Status</th>
-                    <th>Updated</th>
-                    <th>Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                {inventory.map(i => (
-
-                    <tr
-                        key={i.id_inventario}
-                    >
-
-                        <td>
-                            {i.proyecto}
-                        </td>
-
-                        <td>
-                            {i.nombre_recurso}
-                        </td>
-
-                        <td>
-                            {i.cantidad}
-                        </td>
-
-                        <td>
-                            {i.estado}
-                        </td>
-
-                        <td>
-                            {
-                                i.fecha_actualizacion
-                            }
-                        </td>
-
-                        <td>
-
-                            <Button
-                                text="Edit"
-                                onClick={() =>
-                                    handleEdit(i)
-                                }
-                                className="btn-edit"
-                            />
-
-                            <Button
-                                text="Delete"
-                                onClick={() =>
-                                    handleDeleteClick(i)
-                                }
-                                className="btn-delete"
-                            />
-
-                        </td>
-
-                    </tr>
-
-                ))}
-
-            </tbody>
-
-        </table>
+        <Table data={inventory} columns={columns} actions={actions} />
 
         {showConfirm && (
 

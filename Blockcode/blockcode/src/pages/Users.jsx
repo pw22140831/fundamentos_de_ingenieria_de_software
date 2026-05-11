@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
 import ConfirmModal from "../components/ConfirmModal";
+import Table from "../components/Table";
 
 import { buildMessage } from "../utils/messageBuilder";
 
@@ -438,6 +439,46 @@ export default function Users() {
     setSubmitted(false);
   };
 
+  const columns = [
+    { key: 'nombre', label: 'Name' },
+    { key: 'correo', label: 'Email' },
+    { key: 'rol_nombre', label: 'Role', render: (item) => item.rol_nombre || item.rol }
+  ];
+
+  const actions = (user) => {
+    const userActions = [];
+    // Edit button - admin can edit all, operador can edit trabajadores
+    if (isAdmin || (isOperador && Number(user.id_rol) === 3)) {
+      userActions.push({
+        label: 'Edit',
+        className: 'btn-edit',
+        onClick: handleEdit
+      });
+    }
+    // Delete button - admin and operador can delete
+    if (isAdmin || isOperador) {
+      userActions.push({
+        label: 'Delete',
+        className: 'btn-delete',
+        onClick: handleDeleteClick
+      });
+    }
+    return userActions;
+  };
+
+  // Filter users based on role permissions
+  const filteredUsers = users.filter((u) => {
+    // ADMIN VE TODO
+    if (isAdmin) {
+      return true;
+    }
+    // OPERADOR SOLO VE TRABAJADORES
+    if (isOperador) {
+      return Number(u.id_rol) === 3;
+    }
+    return false;
+  });
+
   return (
     <div className="users-container">
       <h2>{editing ? "Editando usuario" : "Users"}</h2>
@@ -511,82 +552,7 @@ export default function Users() {
       )}
 
       {/* TABLE */}
-      <table className="users-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-
-            {(isAdmin || isOperador) && <th>Actions</th>}
-          </tr>
-        </thead>
-
-        <tbody>
-          {users
-
-            // =====================
-            // FILTRO POR ROL
-            // =====================
-            .filter((u) => {
-              // ADMIN VE TODO
-              if (isAdmin) {
-                return true;
-              }
-
-              // OPERADOR SOLO VE TRABAJADORES
-              if (isOperador) {
-                return Number(u.id_rol) === 3;
-              }
-
-              return false;
-            })
-
-            // =====================
-            // MAP
-            // =====================
-            .map((u) => (
-              <tr key={u.id_usuario}>
-                <td>{u.nombre}</td>
-
-                <td>{u.correo}</td>
-
-                <td>{u.rol_nombre || u.rol}</td>
-
-                {(isAdmin || isOperador) && (
-                  <td>
-                    {/* =====================
-                                EDIT
-                            ===================== */}
-
-                    {
-                      // ADMIN EDITA TODO
-                      (isAdmin ||
-                        // OPERADOR SOLO TRABAJADORES
-                        (isOperador && Number(u.id_rol) === 3)) && (
-                        <Button
-                          text="Edit"
-                          onClick={() => handleEdit(u)}
-                          className="btn-edit"
-                        />
-                      )
-                    }
-
-                    {/* =====================
-                                DELETE
-                            ===================== */}
-
-                    <Button
-                      text="Delete"
-                      onClick={() => handleDeleteClick(u)}
-                      className="btn-delete"
-                    />
-                  </td>
-                )}
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <Table data={filteredUsers} columns={columns} actions={actions} />
 
       {/* MODAL */}
       {showConfirm && (

@@ -1,0 +1,131 @@
+/* Table.css */
+:root {
+    --navy: #071A3D;
+    --navy-soft: #0F2A55;
+    --forest: #1E4D2B;
+    --forest-light: #5DAA7A;
+    --accent-red: #D64F4F;
+    --surface: rgba(255, 255, 255, 0.08);
+    --surface-strong: rgba(255, 255, 255, 0.16);
+    --text-light: #F4F7FF;
+    --text-muted: #CAD4E8;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 16px;
+    background: rgba(18, 36, 64, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+}
+
+.data-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.data-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+}
+
+.data-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+    background: var(--surface);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.actions-cell button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+}
+
+.actions-cell .btn-edit {
+    background: linear-gradient(135deg, var(--forest) 0%, #14613f 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(30, 77, 43, 0.3);
+}
+
+.actions-cell .btn-edit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(30, 77, 43, 0.4);
+}
+
+.actions-cell .btn-delete {
+    background: linear-gradient(135deg, var(--accent-red) 0%, #b83d3d 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(214, 79, 79, 0.3);
+}
+
+.actions-cell .btn-delete:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(214, 79, 79, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 16px 0;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+
+    .actions-cell {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .actions-cell button {
+        width: 100%;
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .data-table th,
+    .data-table td {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+}
