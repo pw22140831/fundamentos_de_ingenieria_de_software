@@ -92,7 +92,7 @@ BEGIN
         apellido_paterno = p_apellido_paterno,
         apellido_materno = p_apellido_materno,
         correo = p_correo,
-        password_hash = p_password_hash,
+        password_hash = COALESCE(p_password_hash, password_hash),
         id_rol = p_id_rol,
         activo = p_activo
     WHERE id_usuario = p_id_usuario;
