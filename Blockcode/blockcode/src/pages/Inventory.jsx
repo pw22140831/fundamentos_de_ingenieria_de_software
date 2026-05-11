@@ -127,7 +127,7 @@ export default function Inventory() {
                 ),
 
                 axios.get(
-                    `${API_BASE}/projects/index.php`,
+                    `${API_BASE}/proyectos/index.php`,
                     axiosConfig
                 )
 
