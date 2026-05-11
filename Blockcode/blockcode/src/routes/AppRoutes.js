@@ -3,6 +3,7 @@ import Login1 from "../pages/Login1";
 import Users from "../pages/Users";
 import Layout from "../pages/Layout";
 import Projects from "../pages/Projects";
+import Inventory from "../pages/Inventory";
 
 export default function AppRoutes() {
     return (
@@ -16,6 +17,7 @@ export default function AppRoutes() {
                 <Route path="/dashboard" element={<Layout />}>
                     <Route path="users" element={<Users />} />
                     <Route path="projects" element={<Projects />} />
+                    <Route path="inventory" element={<Inventory />}/>
                 </Route>
 
             </Routes>
