@@ -237,6 +237,7 @@ export default function Projects() {
             <div className="form">
 
                 <input
+                    label="Project name"
                     name="nombre"
                     placeholder="Name"
                     value={form.nombre}
@@ -245,6 +246,7 @@ export default function Projects() {
                 />
 
                 <input
+                    label="Responsible"
                     name="responsable"
                     placeholder="Responsible"
                     value={form.responsable}
@@ -253,6 +255,7 @@ export default function Projects() {
                 />
 
                 <input
+                    label="Start Date"
                     type="date"
                     name="fecha_inicio"
                     value={form.fecha_inicio}
@@ -261,6 +264,7 @@ export default function Projects() {
                 />
 
                 <input
+                    label="End Date"
                     type="date"
                     name="fecha_fin"
                     value={form.fecha_fin}
@@ -269,6 +273,7 @@ export default function Projects() {
                 />
 
                 <input
+                    label="Budget"
                     name="presupuesto"
                     placeholder="Budget"
                     value={form.presupuesto}
