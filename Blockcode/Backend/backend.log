@@ -1,0 +1,67 @@
+[Mon May 11 06:29:01 2026] PHP 8.3.6 Development Server (http://0.0.0.0:8000) started
+[Mon May 11 06:29:27 2026] 127.0.0.1:58998 Accepted
+[Mon May 11 06:29:27 2026] 127.0.0.1:58998 [200]: GET /api/v1/auth/login.php
+[Mon May 11 06:29:27 2026] 127.0.0.1:58998 Closing
+[Mon May 11 06:29:34 2026] 127.0.0.1:44210 Accepted
+[Mon May 11 06:29:34 2026] 127.0.0.1:44210 [200]: POST /api/v1/auth/login.php
+[Mon May 11 06:29:34 2026] 127.0.0.1:44210 Closing
+[Mon May 11 06:29:45 2026] 127.0.0.1:33650 Accepted
+[Mon May 11 06:29:45 2026] 127.0.0.1:33650 [200]: POST /api/v1/auth/login.php
+[Mon May 11 06:29:45 2026] 127.0.0.1:33650 Closing
+[Mon May 11 06:30:01 2026] 127.0.0.1:33112 Accepted
+[Mon May 11 06:30:02 2026] 127.0.0.1:33112 [200]: GET /api/v1/auth/login.php
+[Mon May 11 06:30:02 2026] 127.0.0.1:33112 Closing
+[Mon May 11 06:30:17 2026] 127.0.0.1:53592 Accepted
+[Mon May 11 06:30:17 2026] 127.0.0.1:53592 [200]: HEAD /api/v1/users/save.php
+[Mon May 11 06:30:17 2026] 127.0.0.1:53592 Closing
+[Mon May 11 06:30:23 2026] 127.0.0.1:33238 Accepted
+[Mon May 11 06:30:23 2026] 127.0.0.1:33238 [200]: POST /api/v1/auth/login.php
+[Mon May 11 06:30:23 2026] 127.0.0.1:33238 Closing
+[Mon May 11 06:30:24 2026] 127.0.0.1:33252 Accepted
+[Mon May 11 06:30:24 2026] 127.0.0.1:33252 [200]: GET /api/v1/proyectos/index.php
+[Mon May 11 06:30:24 2026] 127.0.0.1:33252 Closing
+[Mon May 11 06:30:24 2026] 127.0.0.1:33268 Accepted
+[Mon May 11 06:30:24 2026] 127.0.0.1:33268 [200]: GET /api/v1/proyectos/index.php
+[Mon May 11 06:30:24 2026] 127.0.0.1:33268 Closing
+[Mon May 11 06:30:25 2026] 127.0.0.1:33284 Accepted
+[Mon May 11 06:30:25 2026] 127.0.0.1:33284 [200]: GET /api/v1/inventario/index.php
+[Mon May 11 06:30:25 2026] 127.0.0.1:33284 Closing
+[Mon May 11 06:30:25 2026] 127.0.0.1:33294 Accepted
+[Mon May 11 06:30:25 2026] 127.0.0.1:33294 [404]: GET /api/v1/projects/index.php - No such file or directory
+[Mon May 11 06:30:25 2026] 127.0.0.1:33294 Closing
+[Mon May 11 06:30:25 2026] 127.0.0.1:33306 Accepted
+[Mon May 11 06:30:25 2026] 127.0.0.1:33322 Accepted
+[Mon May 11 06:30:25 2026] 127.0.0.1:33306 [404]: GET /api/v1/projects/index.php - No such file or directory
+[Mon May 11 06:30:25 2026] 127.0.0.1:33306 Closing
+[Mon May 11 06:30:25 2026] 127.0.0.1:33322 [200]: GET /api/v1/inventario/index.php
+[Mon May 11 06:30:25 2026] 127.0.0.1:33322 Closing
+[Mon May 11 06:31:02 2026] 127.0.0.1:53768 Accepted
+[Mon May 11 06:31:02 2026] 127.0.0.1:53768 [200]: GET /api/v1/proyectos/index.php
+[Mon May 11 06:31:02 2026] 127.0.0.1:53768 Closing
+[Mon May 11 06:31:02 2026] 127.0.0.1:53778 Accepted
+[Mon May 11 06:31:02 2026] 127.0.0.1:53778 [200]: GET /api/v1/proyectos/index.php
+[Mon May 11 06:31:02 2026] 127.0.0.1:53778 Closing
+[Mon May 11 06:31:08 2026] 127.0.0.1:53792 Accepted
+[Mon May 11 06:31:08 2026] 127.0.0.1:53792 [200]: GET /api/v1/inventario/index.php
+[Mon May 11 06:31:08 2026] 127.0.0.1:53792 Closing
+[Mon May 11 06:31:08 2026] 127.0.0.1:53798 Accepted
+[Mon May 11 06:31:08 2026] 127.0.0.1:53798 [404]: GET /api/v1/projects/index.php - No such file or directory
+[Mon May 11 06:31:08 2026] 127.0.0.1:53798 Closing
+[Mon May 11 06:31:08 2026] 127.0.0.1:53810 Accepted
+[Mon May 11 06:31:08 2026] 127.0.0.1:53812 Accepted
+[Mon May 11 06:31:08 2026] 127.0.0.1:53810 [200]: GET /api/v1/inventario/index.php
+[Mon May 11 06:31:08 2026] 127.0.0.1:53810 Closing
+[Mon May 11 06:31:08 2026] 127.0.0.1:53812 [404]: GET /api/v1/projects/index.php - No such file or directory
+[Mon May 11 06:31:08 2026] 127.0.0.1:53812 Closing
+[Mon May 11 06:31:15 2026] 127.0.0.1:38476 Accepted
+[Mon May 11 06:31:15 2026] 127.0.0.1:38482 Accepted
+[Mon May 11 06:31:15 2026] 127.0.0.1:38476 [404]: GET /api/v1/projects/index.php - No such file or directory
+[Mon May 11 06:31:15 2026] 127.0.0.1:38476 Closing
+[Mon May 11 06:31:15 2026] 127.0.0.1:38482 [200]: GET /api/v1/inventario/index.php
+[Mon May 11 06:31:15 2026] 127.0.0.1:38482 Closing
+[Mon May 11 06:31:16 2026] 127.0.0.1:38498 Accepted
+[Mon May 11 06:31:16 2026] 127.0.0.1:38498 [404]: GET /api/v1/projects/index.php - No such file or directory
+[Mon May 11 06:31:16 2026] 127.0.0.1:38498 Closing
+[Mon May 11 06:31:16 2026] 127.0.0.1:38514 Accepted
+[Mon May 11 06:31:16 2026] 127.0.0.1:38514 [200]: GET /api/v1/inventario/index.php
+[Mon May 11 06:31:16 2026] 127.0.0.1:38514 Closing
