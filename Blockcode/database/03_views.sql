@@ -98,3 +98,38 @@ LEFT JOIN proveedores pr
 
 WHERE t.is_active = TRUE
 AND p.is_active = TRUE;
+
+CREATE OR REPLACE VIEW vw_usuarios_proyectos AS
+SELECT
+    up.id_usuario_proyecto,
+    up.fecha_asignacion,
+
+    u.id_usuario,
+    CONCAT(
+        u.nombre,
+        ' ',
+        u.apellido_paterno,
+        ' ',
+        u.apellido_materno
+    ) AS usuario,
+
+    r.nombre AS rol,
+
+    p.id_proyecto,
+    p.nombre AS proyecto
+
+FROM usuarios_proyectos up
+
+INNER JOIN usuarios u
+    ON up.id_usuario = u.id_usuario
+
+INNER JOIN roles r
+    ON u.id_rol = r.id_rol
+
+INNER JOIN proyectos p
+    ON up.id_proyecto = p.id_proyecto
+
+WHERE up.is_active = TRUE
+AND u.activo = TRUE
+AND p.is_active = TRUE
+AND r.is_active = TRUE;

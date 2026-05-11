@@ -370,3 +370,84 @@ BEGIN
     WHERE id_transaccion = p_id_transaccion;
 END;
 $$;
+
+-- #####################################################
+-- TABLA: RELACION USUARIOS - PROYECTOS
+-- #####################################################
+CREATE OR REPLACE PROCEDURE sp_insertar_usuario_proyecto(
+    p_id_usuario INT,
+    p_id_proyecto INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    -- Evitar asignaciones duplicadas activas
+    IF EXISTS (
+        SELECT 1
+        FROM usuarios_proyectos
+        WHERE id_usuario = p_id_usuario
+        AND id_proyecto = p_id_proyecto
+        AND is_active = TRUE
+    ) THEN
+        RAISE EXCEPTION
+        'El usuario ya está asignado a este proyecto';
+    END IF;
+
+    INSERT INTO usuarios_proyectos (
+        id_usuario,
+        id_proyecto
+    )
+    VALUES (
+        p_id_usuario,
+        p_id_proyecto
+    );
+
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE sp_actualizar_usuario_proyecto(
+    p_id_usuario_proyecto INT,
+    p_id_usuario INT,
+    p_id_proyecto INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    -- Evitar duplicados al actualizar
+    IF EXISTS (
+        SELECT 1
+        FROM usuarios_proyectos
+        WHERE id_usuario = p_id_usuario
+        AND id_proyecto = p_id_proyecto
+        AND id_usuario_proyecto <> p_id_usuario_proyecto
+        AND is_active = TRUE
+    ) THEN
+        RAISE EXCEPTION
+        'Ya existe otra asignación activa con esos datos';
+    END IF;
+
+    UPDATE usuarios_proyectos
+    SET
+        id_usuario = p_id_usuario,
+        id_proyecto = p_id_proyecto
+    WHERE id_usuario_proyecto = p_id_usuario_proyecto
+    AND is_active = TRUE;
+
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE sp_eliminar_usuario_proyecto(
+    p_id_usuario_proyecto INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    UPDATE usuarios_proyectos
+    SET is_active = FALSE
+    WHERE id_usuario_proyecto = p_id_usuario_proyecto;
+
+END;
+$$;
