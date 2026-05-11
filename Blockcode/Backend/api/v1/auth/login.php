@@ -18,22 +18,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $correo = $data["correo"];
 $password = $data["password"];
 
-$query = "
-SELECT 
-    u.id_usuario,
-    u.nombre,
-    u.apellido_paterno,
-    u.apellido_materno,
-    u.correo,
-    u.password_hash,
-    r.nombre AS rol,
-    u.activo
-FROM usuarios u
-INNER JOIN roles r
-ON u.id_rol = r.id_rol
-WHERE u.correo = :correo
-LIMIT 1
-";
+$query = "SELECT * FROM vw_usuarios WHERE correo = :correo";
 
 $stmt = $conn->prepare($query);
 
@@ -62,7 +47,7 @@ if (!password_verify($password, $user["password_hash"])) {
 $payload = [
     "id_usuario" => $user["id_usuario"],
     "correo" => $user["correo"],
-    "rol" => $user["rol"],
+    "rol" => $user["id_rol"],
     "exp" => time() + 3600
 ];
 

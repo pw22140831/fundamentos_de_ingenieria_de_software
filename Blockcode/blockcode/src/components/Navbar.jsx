@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -7,24 +8,41 @@ export default function Navbar() {
         localStorage.getItem("user")
     );
 
-    const rol = user?.rol || "";
+    const idRol = user?.id_rol || 0;
 
     const isAdmin =
-        rol.toLowerCase() === "admin";
+        idRol === 1;
 
     const isOperador =
-        rol.toLowerCase() === "operador";
+        idRol === 2;
+
+    const isUsuario =
+        idRol === 3;
+
     return (
+
         <nav className="navbar">
 
-            <NavLink to="/dashboard/projects" className="nav-link">
+            <NavLink
+                to="/dashboard/projects"
+                className="nav-link"
+            >
                 Proyectos
             </NavLink>
-            <NavLink to="/dashboard/inventory">
+
+            <NavLink
+                to="/dashboard/inventory"
+                className="nav-link"
+            >
                 Inventory
             </NavLink>
+
             {(isAdmin || isOperador) && (
-                <NavLink to="/dashboard/users" className="nav-link">
+
+                <NavLink
+                    to="/dashboard/users"
+                    className="nav-link"
+                >
                     Usuarios
                 </NavLink>
             )}

@@ -12,6 +12,7 @@ SELECT
     u.apellido_paterno,
     u.apellido_materno,
     u.correo,
+    r.id_rol,
     r.nombre AS rol,
     u.fecha_creacion,
     u.activo
