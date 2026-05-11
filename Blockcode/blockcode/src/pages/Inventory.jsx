@@ -6,6 +6,7 @@ import {
     USE_BACKEND
 } from "../config/config";
 
+import Select from "../components/Select";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Message from "../components/Message";
@@ -478,7 +479,7 @@ return (
 
         <div className="inventory-form">
 
-            <select
+            <Select
                 label="Project"
                 name="id_proyecto"
                 value={form.id_proyecto}
@@ -500,7 +501,7 @@ return (
 
                 ))}
 
-            </select>
+            </Select>
 
             <Input
                 label="Resource"

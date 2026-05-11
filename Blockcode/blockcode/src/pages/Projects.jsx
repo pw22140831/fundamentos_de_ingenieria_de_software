@@ -5,6 +5,7 @@ import {
     USE_BACKEND
 } from "../config/config";
 
+import Select from "../components/Select";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Message from "../components/Message";

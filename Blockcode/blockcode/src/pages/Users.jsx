@@ -3,6 +3,7 @@ import axios from "axios";
 
 import { API_BASE, USE_BACKEND } from "../config/config";
 
+import Select from "../components/Select";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Message from "../components/Message";
@@ -489,7 +490,7 @@ export default function Users() {
             error={submitted && isEmpty(form.password)}
           />
 
-          <select label="Role"name="id_rol" value={form.id_rol} onChange={handleChange}>
+          <Select label="Role"name="id_rol" value={form.id_rol} onChange={handleChange}>
             <option value="">Select Role</option>
 
             {roles
@@ -499,7 +500,7 @@ export default function Users() {
                   {r.nombre}
                 </option>
               ))}
-          </select>
+          </Select>
 
           <Button
             text={editing ? "Update" : "Create"}
