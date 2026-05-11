@@ -1,0 +1,11 @@
+CREATE ROLE blockcode_admin WITH LOGIN PASSWORD 'l14Ar56@Bx16Z8!w';
+GRANT ALL PRIVILEGES ON DATABASE "blockcode" TO blockcode_admin;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO blockcode_admin;
+GRANT USAGE ON SCHEMA public TO blockcode_admin;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO blockcode_admin;
+GRANT INSERT, UPDATE, DELETE, SELECT
+ON ALL TABLES IN SCHEMA public
+TO blockcode_admin;
+GRANT USAGE, SELECT
+ON ALL SEQUENCES IN SCHEMA public
+TO blockcode_admin;

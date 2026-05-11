@@ -34,7 +34,6 @@ DROP PROCEDURE IF EXISTS sp_eliminar_proyecto;
 -- TABLAS
 -- =========================
 
-DROP TABLE IF EXISTS auditoria CASCADE;
 DROP TABLE IF EXISTS transacciones CASCADE;
 DROP TABLE IF EXISTS inventario CASCADE;
 DROP TABLE IF EXISTS usuarios_proyectos CASCADE;
