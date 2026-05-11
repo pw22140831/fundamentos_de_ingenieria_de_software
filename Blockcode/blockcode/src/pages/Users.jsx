@@ -489,7 +489,7 @@ export default function Users() {
             error={submitted && isEmpty(form.password)}
           />
 
-          <select name="id_rol" value={form.id_rol} onChange={handleChange}>
+          <select label="Role"name="id_rol" value={form.id_rol} onChange={handleChange}>
             <option value="">Select Role</option>
 
             {roles

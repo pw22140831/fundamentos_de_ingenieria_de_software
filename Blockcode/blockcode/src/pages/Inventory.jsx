@@ -479,6 +479,7 @@ return (
         <div className="inventory-form">
 
             <select
+                label="Project"
                 name="id_proyecto"
                 value={form.id_proyecto}
                 onChange={handleChange}
