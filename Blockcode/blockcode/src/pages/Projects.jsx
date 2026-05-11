@@ -141,7 +141,13 @@ export default function Projects() {
         if (actionType === "create") {
 
             if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/proyectos/save.php`, actionData);
+                await axios.post(`${API_BASE}/proyectos/save.php`, actionData,
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem("token"),
+                        }
+                    }
+                );
             } else {
                 setProjects([
                     ...projects,
@@ -157,7 +163,11 @@ export default function Projects() {
         if (actionType === "update") {
 
             if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/proyectos/update.php`, actionData);
+                await axios.post(`${API_BASE}/proyectos/update.php`, actionData, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem("token"),
+                    }
+                });
             } else {
                 setProjects(projects.map(p =>
                     p.id_proyecto === actionData.id_proyecto
@@ -176,6 +186,10 @@ export default function Projects() {
             if (USE_BACKEND) {
                 await axios.post(`${API_BASE}/proyectos/delete.php`, {
                     id_proyecto: actionData.id_proyecto
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem("token"),
+                    }
                 });
             } else {
                 setProjects(projects.filter(p => p.id_proyecto !== actionData.id_proyecto));
