@@ -9,7 +9,7 @@ export default function Header() {
                 </div>
                 <div className="brand-text">
                     <h1>Blockcode</h1>
-                    <p>Construyendo soluciones digitales con estilo y seguridad</p>
+                    <p>Digital solutions</p>
                 </div>
             </div>
         </header>

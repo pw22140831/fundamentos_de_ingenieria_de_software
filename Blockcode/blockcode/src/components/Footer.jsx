@@ -8,7 +8,7 @@ export default function Footer() {
             <div className="footer-contact">
                 <p>Contacto</p>
                 <p>email: soporte@blockcode.com</p>
-                <p>tel: +52 55 1234 5678</p>
+                <p>tel: +52 446 148 4274</p>
             </div>
         </footer>
     );
