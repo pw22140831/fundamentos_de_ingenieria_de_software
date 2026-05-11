@@ -1,6 +1,7 @@
 CREATE TABLE roles (
     id_rol SERIAL PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL UNIQUE
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE usuarios (
@@ -29,7 +30,8 @@ CREATE TABLE proyectos (
     fecha_fin DATE,
     presupuesto NUMERIC(14,2) NOT NULL CHECK (presupuesto >= 0),
 
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE usuarios_proyectos (
@@ -37,6 +39,8 @@ CREATE TABLE usuarios_proyectos (
     id_usuario INT NOT NULL,
     id_proyecto INT NOT NULL,
     fecha_asignacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE,
+
 
     CONSTRAINT fk_up_usuario
         FOREIGN KEY (id_usuario)
@@ -58,7 +62,8 @@ CREATE TABLE proveedores (
     telefono VARCHAR(30),
     correo VARCHAR(150),
 
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE inventario (
@@ -69,6 +74,7 @@ CREATE TABLE inventario (
     estado VARCHAR(50) NOT NULL,
 
     fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE,
 
     CONSTRAINT fk_inventario_proyecto
         FOREIGN KEY (id_proyecto)
@@ -89,7 +95,8 @@ CREATE TABLE transacciones (
     descripcion TEXT,
 
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
+    is_active BOOLEAN DEFAULT TRUE,
+    
     CONSTRAINT fk_transaccion_proyecto
         FOREIGN KEY (id_proyecto)
         REFERENCES proyectos(id_proyecto)
