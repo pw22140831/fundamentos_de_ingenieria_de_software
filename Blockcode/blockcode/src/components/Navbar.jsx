@@ -23,9 +23,11 @@ export default function Navbar() {
             <NavLink to="/dashboard/inventory">
                 Inventory
             </NavLink>
+            {(isAdmin || isOperador) && (
                 <NavLink to="/dashboard/users" className="nav-link">
                     Usuarios
                 </NavLink>
+            )}
 
         </nav>
     );
