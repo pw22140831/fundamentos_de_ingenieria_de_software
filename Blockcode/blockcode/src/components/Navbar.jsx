@@ -27,7 +27,7 @@ export default function Navbar() {
                 to="/dashboard/projects"
                 className="nav-link"
             >
-                Proyectos
+                Projects
             </NavLink>
 
             <NavLink
@@ -43,7 +43,7 @@ export default function Navbar() {
                     to="/dashboard/users"
                     className="nav-link"
                 >
-                    Usuarios
+                    Users
                 </NavLink>
             )}
 

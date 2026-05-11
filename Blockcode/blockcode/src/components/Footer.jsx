@@ -1,8 +1,15 @@
 import "./Footer.css";
 export default function Footer() {
     return (
-        <footer className="App-footer">
-            <p>© 2026 Blockcode</p>
+        <footer className="App-footer footer-card">
+            <div className="footer-brand">
+                <p>© 2026 Blockcode</p>
+            </div>
+            <div className="footer-contact">
+                <p>Contacto</p>
+                <p>email: soporte@blockcode.com</p>
+                <p>tel: +52 55 1234 5678</p>
+            </div>
         </footer>
     );
 }

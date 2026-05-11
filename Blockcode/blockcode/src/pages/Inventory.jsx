@@ -462,8 +462,8 @@ return (
         <h2>
             {
                 editing
-                    ? "Editando inventario"
-                    : "Inventario"
+                    ? "Editing Inventory"
+                    : "Inventory"
             }
         </h2>
 

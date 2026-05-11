@@ -3,9 +3,14 @@ import logo from "../assets/images/logo.jpeg";
 export default function Header() {
     return (
         <header className="App-header">
-            <h1>Blockcode</h1>
-            <div className="logo-space">
-                <img src={logo} alt="Logo" />
+            <div className="header-brand">
+                <div className="logo-space">
+                    <img src={logo} alt="Blockcode logo" />
+                </div>
+                <div className="brand-text">
+                    <h1>Blockcode</h1>
+                    <p>Construyendo soluciones digitales con estilo y seguridad</p>
+                </div>
             </div>
         </header>
     );

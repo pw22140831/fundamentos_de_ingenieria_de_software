@@ -1,23 +1,68 @@
 .App-header {
-    background-color: rgb(4, 4, 4);
-    padding: 20px;
-
+    background: linear-gradient(135deg, #071A3D 0%, #11315b 55%, #1E4D2B 100%);
+    padding: 22px 28px;
     display: flex;
     justify-content: center;
-    /* centra todo horizontalmente */
     align-items: center;
-    /* alinea verticalmente */
-
-    gap: 15px;
-    /* espacio entre logo y texto */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
 }
 
-.App-header h1 {
-    color: rgb(66, 24, 194);
-    font-size: 3rem;
-    margin: 0;
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-width: 1100px;
+    width: 100%;
+}
+
+.logo-space {
+    min-width: 72px;
+    min-height: 72px;
+    display: grid;
+    place-items: center;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .logo-space img {
-    height: 70px;
+    height: 56px;
+    width: auto;
+    border-radius: 14px;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.brand-text h1 {
+    color: #f4f7ff;
+    font-size: 2.4rem;
+    margin: 0;
+}
+
+.brand-text p {
+    margin: 0;
+    color: rgba(244, 247, 255, 0.78);
+    font-size: 1rem;
+    max-width: 520px;
+    line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+    .App-header {
+        padding: 18px 18px;
+    }
+
+    .header-brand {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .brand-text h1 {
+        font-size: 2rem;
+    }
 }
