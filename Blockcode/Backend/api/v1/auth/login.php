@@ -18,7 +18,12 @@ $data = json_decode(file_get_contents("php://input"), true);
 $correo = $data["correo"];
 $password = $data["password"];
 
-$query = "SELECT * FROM vw_usuarios WHERE correo = :correo";
+$query = "
+SELECT *
+FROM fn_obtener_login_usuario(
+    :correo
+)
+";
 
 $stmt = $conn->prepare($query);
 
