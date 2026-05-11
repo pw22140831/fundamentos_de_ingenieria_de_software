@@ -243,46 +243,46 @@ export default function Login() {
                 <Header />
 
                 <main className="App-main">
+                    <section className="login-card">
+                        <div className="login-head">
+                            <h2>Accede a tu cuenta</h2>
+                            <p>Inicia sesión con un diseño moderno y seguro.</p>
+                        </div>
 
-                    <h2>Login</h2>
+                        {message && (
+                            <Message
+                                text={message}
+                                type={messageType}
+                            />
+                        )}
 
-                    {/* MENSAJE */}
-                    {message && (
-                        <Message
-                            text={message}
-                            type={messageType}
-                        />
-                    )}
+                        <form
+                            className="login-form"
+                            onSubmit={handleSubmit}
+                        >
+                            <Input
+                                label="Correo"
+                                type="email"
+                                name="user"
+                                value={inputs.user}
+                                onChange={handleChange}
+                            />
 
-                    <form
-                        className="login-form"
-                        onSubmit={handleSubmit}
-                    >
+                            <Input
+                                label="Contraseña"
+                                type="password"
+                                name="password"
+                                value={inputs.password}
+                                onChange={handleChange}
+                            />
 
-                        <Input
-                            label="Correo"
-                            type="email"
-                            name="user"
-                            value={inputs.user}
-                            onChange={handleChange}
-                        />
-
-                        <Input
-                            label="Password"
-                            type="password"
-                            name="password"
-                            value={inputs.password}
-                            onChange={handleChange}
-                        />
-
-                        <Button
-                            text="Login"
-                            type="submit"
-                            className="btn-login"
-                        />
-
-                    </form>
-
+                            <Button
+                                text="Iniciar sesión"
+                                type="submit"
+                                className="btn-login"
+                            />
+                        </form>
+                    </section>
                 </main>
 
                 <Footer />
