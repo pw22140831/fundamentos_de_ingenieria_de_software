@@ -73,7 +73,6 @@
 .users-table td {
   padding: 12px;
   border-bottom: 1px solid #ccc;
-  text-align: center;
 }
 
 .users-table tr:hover {
