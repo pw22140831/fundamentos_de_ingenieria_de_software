@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE } from "../config/config";
+
+import {
+    API_BASE,
+    USE_BACKEND
+} from "../config/config";
 
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -14,6 +18,27 @@ import "./ListUser.css";
 
 export default function Users() {
 
+    // =====================
+    // USER LOGIN
+    // =====================
+    const loggedUser = JSON.parse(
+        localStorage.getItem("user")
+    );
+
+    const token =
+        localStorage.getItem("token");
+
+    const rol = loggedUser?.rol || "";
+
+    const isAdmin =
+        rol.toLowerCase() === "admin";
+
+    const isOperador =
+        rol.toLowerCase() === "operador";
+
+    // =====================
+    // STATES
+    // =====================
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
 
@@ -27,63 +52,135 @@ export default function Users() {
         id_rol: ""
     });
 
-    const [editing, setEditing] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
+    const [editing, setEditing] =
+        useState(false);
 
-    const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] =
+        useState(false);
 
-    const [showConfirm, setShowConfirm] = useState(false);
-    const [actionType, setActionType] = useState("");
-    const [actionData, setActionData] = useState(null);
+    const [message, setMessage] =
+        useState("");
 
-    const USE_BACKEND = true;
+    const [messageType, setMessageType] =
+        useState("");
 
-    const currentUser = JSON.parse(localStorage.getItem("user")) || { rol: 1 };
-    const isAdmin = currentUser.rol === 1;
-    const isOperador = currentUser.rol === 2;
+    const [loading, setLoading] =
+        useState(false);
 
-    const isEmpty = (v) => !v || v.trim() === "";
+    const [showConfirm, setShowConfirm] =
+        useState(false);
 
-    // ===================== MENSAJES
-    const showMessage = (text, type) => {
-        setMessage(text);
-        setMessageType(type);
+    const [actionType, setActionType] =
+        useState("");
 
-        setTimeout(() => {
-            setMessage("");
-            setMessageType("");
-        }, 3000);
+    const [actionData, setActionData] =
+        useState(null);
+
+    // =====================
+    // AXIOS CONFIG
+    // =====================
+    const axiosConfig = {
+        headers: {
+            Authorization:
+                `Bearer ${token}`
+        }
     };
 
-    // ===================== VALIDACIÓN
+    // =====================
+    // VALIDACIÓN
+    // =====================
+    const isEmpty = (v) =>
+        !v || v.trim() === "";
+
     const validateForm = () => {
+
         if (
             !form.nombre ||
             !form.apellido_paterno ||
             !form.apellido_materno ||
             !form.correo ||
-            !form.password ||
+            (!editing && !form.password) ||
             !form.id_rol
         ) {
-            showMessage("Faltan datos obligatorios", "error");
+
+            showMessage(
+                "Faltan datos obligatorios",
+                "error"
+            );
+
             return false;
         }
+
         return true;
     };
 
-    // ===================== LOAD
+    // =====================
+    // MENSAJES
+    // =====================
+    const showMessage = (text, type) => {
+
+        setMessage(text);
+        setMessageType(type);
+
+        setTimeout(() => {
+
+            setMessage("");
+            setMessageType("");
+
+        }, 3000);
+    };
+
+    // =====================
+    // LOAD DATA
+    // =====================
     useEffect(() => {
+
         setLoading(true);
 
+        // =====================
+        // BACKEND
+        // =====================
         if (USE_BACKEND) {
-            axios.get(`${API_BASE}/users/index.php`)
-                .then(res => setUsers(res.data));
 
-            axios.get(`${API_BASE}/roles/index.php`)
-                .then(res => setRoles(res.data));
-        } else {
+            Promise.all([
+
+                axios.get(
+                    `${API_BASE}/users/index.php`,
+                    axiosConfig
+                ),
+
+                axios.get(
+                    `${API_BASE}/roles/index.php`,
+                    axiosConfig
+                )
+
+            ])
+                .then(([usersRes, rolesRes]) => {
+
+                    setUsers(usersRes.data);
+                    setRoles(rolesRes.data);
+
+                })
+                .catch((error) => {
+
+                    console.error(error);
+
+                    showMessage(
+                        "Error cargando datos",
+                        "error"
+                    );
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+
+        }
+
+        // =====================
+        // LOCAL TEST
+        // =====================
+        else {
+
             setUsers([
                 {
                     id_usuario: 1,
@@ -97,127 +194,390 @@ export default function Users() {
             ]);
 
             setRoles([
-                { id_rol: 1, nombre: "Admin" },
-                { id_rol: 2, nombre: "Operador" },
-                { id_rol: 3, nombre: "Usuario" }
+                {
+                    id_rol: 1,
+                    nombre: "Admin"
+                },
+                {
+                    id_rol: 2,
+                    nombre: "Operador"
+                },
+                {
+                    id_rol: 3,
+                    nombre: "Trabajador"
+                }
             ]);
+
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
         }
 
-        setTimeout(() => setLoading(false), 500);
     }, []);
 
-    // ===================== INPUT
+    // =====================
+    // INPUTS
+    // =====================
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+
+        setForm({
+            ...form,
+            [e.target.name]:
+                e.target.value
+        });
     };
 
-    // ===================== SAVE (CREATE / UPDATE)
+    // =====================
+    // SAVE CLICK
+    // =====================
     const handleSaveClick = () => {
+
         setSubmitted(true);
+
         if (!validateForm()) return;
 
-        setActionType(editing ? "update" : "create");
+        setActionType(
+            editing ? "update" : "create"
+        );
+
         setActionData(form);
+
         setShowConfirm(true);
     };
 
-    // ===================== DELETE CLICK
+    // =====================
+    // DELETE CLICK
+    // =====================
     const handleDeleteClick = (user) => {
+
         setActionType("delete");
+
         setActionData(user);
+
         setShowConfirm(true);
     };
 
-    // ===================== EDIT
+    // =====================
+    // EDIT
+    // =====================
     const handleEdit = (user) => {
-        if (!isAdmin) return;
-        setForm(user);
-        setEditing(true);
+
+        const roleName = (
+            user.rol_nombre ||
+            user.rol ||
+            ""
+        ).toLowerCase();
+
+        // =====================
+        // ADMIN
+        // =====================
+        if (isAdmin) {
+
+            setForm({
+                ...user,
+                password: ""
+            });
+
+            setEditing(true);
+
+            return;
+        }
+
+        // =====================
+        // OPERADOR
+        // =====================
+        if (
+            isOperador &&
+            roleName === "trabajador"
+        ) {
+
+            setForm({
+                ...user,
+                password: ""
+            });
+
+            setEditing(true);
+
+            return;
+        }
+
+        // =====================
+        // SIN PERMISOS
+        // =====================
+        showMessage(
+            "No tienes permisos",
+            "error"
+        );
     };
 
-    // ===================== CONFIRM ACTION
+    // =====================
+    // CONFIRM ACTION
+    // =====================
     const handleConfirm = async () => {
+
         setLoading(true);
 
-        // CREATE
-        if (actionType === "create") {
+        try {
 
-            if (isOperador && actionData.id_rol != 3) {
-                showMessage("Solo puedes crear usuarios básicos", "error");
-                setLoading(false);
-                return;
+            // =====================
+            // CREATE
+            // =====================
+            if (actionType === "create") {
+
+                const role =
+                    roles.find(
+                        r =>
+                            r.id_rol ==
+                            actionData.id_rol
+                    );
+
+                // OPERADOR SOLO TRABAJADORES
+                if (
+                    isOperador &&
+                    role?.nombre
+                        .toLowerCase() !==
+                    "trabajador"
+                ) {
+
+                    showMessage(
+                        "Solo puedes crear trabajadores",
+                        "error"
+                    );
+
+                    setLoading(false);
+
+                    return;
+                }
+
+                // BACKEND
+                if (USE_BACKEND) {
+
+                    await axios.post(
+                        `${API_BASE}/users/save.php`,
+                        actionData,
+                        axiosConfig
+                    );
+
+                    const usersRes =
+                        await axios.get(
+                            `${API_BASE}/users/index.php`,
+                            axiosConfig
+                        );
+
+                    setUsers(usersRes.data);
+
+                }
+
+                // LOCAL
+                else {
+
+                    setUsers([
+                        ...users,
+                        {
+                            ...actionData,
+                            id_usuario:
+                                Date.now(),
+                            rol_nombre:
+                                role?.nombre
+                        }
+                    ]);
+                }
+
+                showMessage(
+                    buildMessage(
+                        "Usuario",
+                        actionData.nombre,
+                        "creado"
+                    ),
+                    "success"
+                );
+
+                resetForm();
             }
 
-            if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/users/save.php`, actionData);
-            } else {
-                const role = roles.find(r => r.id_rol == actionData.id_rol);
+            // =====================
+            // UPDATE
+            // =====================
+            if (actionType === "update") {
 
-                setUsers([
-                    ...users,
-                    {
-                        ...actionData,
-                        id_usuario: Date.now(),
-                        rol_nombre: role?.nombre
+                const role = roles.find(
+                    r => r.id_rol == actionData.id_rol
+                );
+
+                const roleName =
+                    role?.nombre?.toLowerCase() || "";
+
+                // =====================
+                // ADMIN
+                // =====================
+                if (!isAdmin) {
+
+                    // =====================
+                    // OPERADOR SOLO TRABAJADORES
+                    // =====================
+                    if (
+                        !(
+                            isOperador &&
+                            roleName === "trabajador"
+                        )
+                    ) {
+
+                        showMessage(
+                            "No tienes permisos",
+                            "error"
+                        );
+
+                        setLoading(false);
+
+                        return;
                     }
-                ]);
+                }
+
+                // =====================
+                // BACKEND
+                // =====================
+                if (USE_BACKEND) {
+
+                    await axios.post(
+                        `${API_BASE}/users/update.php`,
+                        actionData,
+                        axiosConfig
+                    );
+
+                    const usersRes =
+                        await axios.get(
+                            `${API_BASE}/users/index.php`,
+                            axiosConfig
+                        );
+
+                    setUsers(usersRes.data);
+
+                }
+
+                // =====================
+                // LOCAL
+                // =====================
+                else {
+
+                    setUsers(
+                        users.map(u =>
+                            u.id_usuario ===
+                                actionData.id_usuario
+
+                                ? {
+                                    ...actionData,
+                                    rol_nombre:
+                                        role?.nombre
+                                }
+
+                                : u
+                        )
+                    );
+                }
+
+                showMessage(
+                    buildMessage(
+                        "Usuario",
+                        actionData.nombre,
+                        "actualizado"
+                    ),
+                    "success"
+                );
+
+                resetForm();
             }
 
-            showMessage(buildMessage("Usuario", actionData.nombre, "creado"), "success");
-            resetForm();
+            // =====================
+            // DELETE
+            // =====================
+            if (actionType === "delete") {
+
+                const role =
+                    roles.find(
+                        r =>
+                            r.id_rol ==
+                            actionData.id_rol
+                    );
+
+                if (
+                    isOperador &&
+                    role?.nombre
+                        .toLowerCase() !==
+                    "trabajador"
+                ) {
+
+                    showMessage(
+                        "Solo puedes eliminar trabajadores",
+                        "error"
+                    );
+
+                    setLoading(false);
+
+                    return;
+                }
+
+                if (USE_BACKEND) {
+
+                    await axios.post(
+                        `${API_BASE}/users/delete.php`,
+                        {
+                            id_usuario:
+                                actionData.id_usuario
+                        },
+                        axiosConfig
+                    );
+
+                    const usersRes =
+                        await axios.get(
+                            `${API_BASE}/users/index.php`,
+                            axiosConfig
+                        );
+
+                    setUsers(usersRes.data);
+
+                } else {
+
+                    setUsers(
+                        users.filter(
+                            u =>
+                                u.id_usuario !==
+                                actionData.id_usuario
+                        )
+                    );
+                }
+
+                showMessage(
+                    buildMessage(
+                        "Usuario",
+                        actionData.nombre,
+                        "eliminado"
+                    ),
+                    "success"
+                );
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Error en la operación",
+                "error"
+            );
+
+        } finally {
+
+            setLoading(false);
+
+            setShowConfirm(false);
         }
-
-        // UPDATE
-        if (actionType === "update") {
-
-            if (!isAdmin) {
-                showMessage("No tienes permisos", "error");
-                setLoading(false);
-                return;
-            }
-
-            if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/users/update.php`, actionData);
-            } else {
-                const role = roles.find(r => r.id_rol == actionData.id_rol);
-
-                setUsers(users.map(u =>
-                    u.id_usuario === actionData.id_usuario
-                        ? { ...actionData, rol_nombre: role?.nombre }
-                        : u
-                ));
-            }
-
-            showMessage(buildMessage("Usuario", actionData.nombre, "actualizado"), "success");
-            resetForm();
-        }
-
-        // DELETE
-        if (actionType === "delete") {
-
-            if (isOperador && actionData.id_rol != 3) {
-                showMessage("Solo puedes eliminar usuarios básicos", "error");
-                setLoading(false);
-                return;
-            }
-
-            if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/users/delete.php`, {
-                    id_usuario: actionData.id_usuario
-                });
-            } else {
-                setUsers(users.filter(u => u.id_usuario !== actionData.id_usuario));
-            }
-
-            showMessage(buildMessage("Usuario", actionData.nombre, "eliminado"), "success");
-        }
-
-        setShowConfirm(false);
-        setLoading(false);
     };
 
-    // ===================== RESET
+    // =====================
+    // RESET
+    // =====================
     const resetForm = () => {
+
         setForm({
             id_usuario: "",
             nombre: "",
@@ -229,120 +589,291 @@ export default function Users() {
         });
 
         setEditing(false);
+
         setSubmitted(false);
     };
 
     return (
+
         <div className="users-container">
 
-            <h2>{editing ? "Editando usuario" : "Users"}</h2>
+            <h2>
+                {
+                    editing
+                        ? "Editando usuario"
+                        : "Users"
+                }
+            </h2>
 
             {loading && <Loading />}
-            {message && <Message text={message} type={messageType} />}
 
+            {message && (
+                <Message
+                    text={message}
+                    type={messageType}
+                />
+            )}
+
+            {/* FORM */}
             {(isAdmin || isOperador) && (
+
                 <div className="users-form">
 
-                    <Input label="Name" name="nombre"
+                    <Input
+                        label="Name"
+                        name="nombre"
                         value={form.nombre}
                         onChange={handleChange}
-                        error={submitted && isEmpty(form.nombre)}
+                        error={
+                            submitted &&
+                            isEmpty(form.nombre)
+                        }
                     />
 
-                    <Input label="Last Name" name="apellido_paterno"
+                    <Input
+                        label="Last Name"
+                        name="apellido_paterno"
                         value={form.apellido_paterno}
                         onChange={handleChange}
-                        error={submitted && isEmpty(form.apellido_paterno)}
+                        error={
+                            submitted &&
+                            isEmpty(
+                                form.apellido_paterno
+                            )
+                        }
                     />
 
-                    <Input label="Second Last Name" name="apellido_materno"
+                    <Input
+                        label="Second Last Name"
+                        name="apellido_materno"
                         value={form.apellido_materno}
                         onChange={handleChange}
-                        error={submitted && isEmpty(form.apellido_materno)}
+                        error={
+                            submitted &&
+                            isEmpty(
+                                form.apellido_materno
+                            )
+                        }
                     />
 
-                    <Input label="Email" name="correo"
+                    <Input
+                        label="Email"
+                        name="correo"
                         value={form.correo}
                         onChange={handleChange}
-                        error={submitted && isEmpty(form.correo)}
+                        error={
+                            submitted &&
+                            isEmpty(form.correo)
+                        }
                     />
 
-                    <Input label="Password" type="password" name="password"
+                    <Input
+                        label="Password"
+                        type="password"
+                        name="password"
                         value={form.password}
                         onChange={handleChange}
-                        error={submitted && isEmpty(form.password)}
+                        error={
+                            submitted &&
+                            isEmpty(form.password)
+                        }
                     />
 
-                    <select name="id_rol" value={form.id_rol} onChange={handleChange}>
-                        <option value="">Select Role</option>
+                    <select
+                        name="id_rol"
+                        value={form.id_rol}
+                        onChange={handleChange}
+                    >
+
+                        <option value="">
+                            Select Role
+                        </option>
+
                         {roles
-                            .filter(r => isAdmin || r.id_rol == 3)
+                            .filter(r =>
+                                isAdmin ||
+                                r.nombre
+                                    .toLowerCase() ===
+                                "trabajador"
+                            )
                             .map(r => (
-                                <option key={r.id_rol} value={r.id_rol}>
+
+                                <option
+                                    key={r.id_rol}
+                                    value={r.id_rol}
+                                >
                                     {r.nombre}
                                 </option>
-                            ))}
+                            ))
+                        }
+
                     </select>
 
                     <Button
-                        text={editing ? "Update" : "Create"}
+                        text={
+                            editing
+                                ? "Update"
+                                : "Create"
+                        }
                         onClick={handleSaveClick}
-                        className={editing ? "btn-edit" : "btn-create"}
+                        className={
+                            editing
+                                ? "btn-edit"
+                                : "btn-create"
+                        }
                     />
 
                 </div>
             )}
 
+            {/* TABLE */}
             <table className="users-table">
+
                 <thead>
+
                     <tr>
+
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
-                        {(isAdmin || isOperador) && <th>Actions</th>}
+
+                        {(isAdmin || isOperador) && (
+                            <th>Actions</th>
+                        )}
+
                     </tr>
+
                 </thead>
 
                 <tbody>
-                    {users.map(u => (
-                        <tr key={u.id_usuario}>
-                            <td>{u.nombre}</td>
-                            <td>{u.correo}</td>
-                            <td>{u.rol_nombre}</td>
 
-                            {(isAdmin || isOperador) && (
+                    {users
+
+                        // =====================
+                        // FILTRO POR ROL
+                        // =====================
+                        .filter(u => {
+
+                            // ADMIN VE TODO
+                            if (isAdmin) {
+                                return true;
+                            }
+
+                            // OPERADOR SOLO VE TRABAJADORES
+                            if (isOperador) {
+
+                                return (
+                                    (
+                                        u.rol_nombre ||
+                                        u.rol ||
+                                        ""
+                                    )
+                                        .toLowerCase() ===
+                                    "trabajador"
+                                );
+                            }
+
+                            // OTROS NO VEN USERS
+                            return false;
+                        })
+
+                        // =====================
+                        // MAP
+                        // =====================
+                        .map(u => (
+
+                            <tr key={u.id_usuario}>
+
+                                <td>{u.nombre}</td>
+
+                                <td>{u.correo}</td>
+
                                 <td>
-                                    {isAdmin && (
-                                        <Button
-                                            text="Edit"
-                                            onClick={() => handleEdit(u)}
-                                            className="btn-edit"
-                                        />
-                                    )}
-
-                                    <Button
-                                        text="Delete"
-                                        onClick={() => handleDeleteClick(u)}
-                                        className="btn-delete"
-                                    />
+                                    {u.rol_nombre || u.rol}
                                 </td>
-                            )}
-                        </tr>
-                    ))}
+
+                                {(isAdmin || isOperador) && (
+
+                                    <td>
+
+                                        {/* =====================
+                                EDIT
+                            ===================== */}
+
+                                        {(
+
+                                            // ADMIN EDITA TODO
+                                            isAdmin ||
+
+                                            // OPERADOR SOLO TRABAJADORES
+                                            (
+                                                isOperador &&
+
+                                                (
+                                                    u.rol_nombre ||
+                                                    u.rol ||
+                                                    ""
+                                                )
+                                                    .toLowerCase() ===
+                                                "trabajador"
+                                            )
+
+                                        ) && (
+
+                                                <Button
+                                                    text="Edit"
+                                                    onClick={() =>
+                                                        handleEdit(u)
+                                                    }
+                                                    className="btn-edit"
+                                                />
+
+                                            )}
+
+                                        {/* =====================
+                                DELETE
+                            ===================== */}
+
+                                        <Button
+                                            text="Delete"
+                                            onClick={() =>
+                                                handleDeleteClick(u)
+                                            }
+                                            className="btn-delete"
+                                        />
+
+                                    </td>
+
+                                )}
+
+                            </tr>
+
+                        ))
+
+                    }
+
                 </tbody>
+
             </table>
 
+            {/* MODAL */}
             {showConfirm && (
+
                 <ConfirmModal
-                    text={`¿Seguro que deseas ${
-                        actionType === "create"
-                            ? "crear"
-                            : actionType === "update"
+
+                    text={`¿Seguro que deseas ${actionType === "create"
+                        ? "crear"
+                        : actionType === "update"
                             ? "actualizar"
                             : "eliminar"
-                    } el usuario "${actionData?.nombre}"?`}
+                        } el usuario "${actionData?.nombre
+                        }"?`}
+
                     onConfirm={handleConfirm}
-                    onCancel={() => setShowConfirm(false)}
+
+                    onCancel={() =>
+                        setShowConfirm(false)
+                    }
                 />
             )}
 

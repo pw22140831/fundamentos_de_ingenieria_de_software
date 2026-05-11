@@ -3,11 +3,17 @@ import "./Navbar.css";
 
 export default function Navbar() {
 
-    const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(
+    localStorage.getItem("user")
+);
 
-    const isAdmin = user?.rol === 1;
-    const isOperador = user?.rol === 2;
+const rol = user?.rol || "";
 
+const isAdmin =
+    rol.toLowerCase() === "admin";
+
+const isOperador =
+    rol.toLowerCase() === "operador";
     return (
         <nav className="navbar">
 

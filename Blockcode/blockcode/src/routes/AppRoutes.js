@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "../pages/Login";
+import Login1 from "../pages/Login1";
 import Users from "../pages/Users";
 import Layout from "../pages/Layout";
 import Projects from "../pages/Projects";
@@ -10,7 +10,7 @@ export default function AppRoutes() {
             <Routes>
 
                 {/* Login */}
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<Login1 />} />
 
                 {/* App con layout */}
                 <Route path="/dashboard" element={<Layout />}>
