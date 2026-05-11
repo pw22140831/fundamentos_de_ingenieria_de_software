@@ -238,7 +238,7 @@ export default function Projects() {
             {/* FORM */}
             <div className="form">
 
-                <input
+                <Input
                     label="Project name"
                     name="nombre"
                     placeholder="Name"
@@ -247,7 +247,7 @@ export default function Projects() {
                     className={submitted && isEmpty(form.nombre) ? "error-input" : ""}
                 />
 
-                <input
+                <Input
                     label="Responsible"
                     name="responsable"
                     placeholder="Responsible"
@@ -256,7 +256,7 @@ export default function Projects() {
                     className={submitted && isEmpty(form.responsable) ? "error-input" : ""}
                 />
 
-                <input
+                <Input
                     label="Start Date"
                     type="date"
                     name="fecha_inicio"
@@ -265,7 +265,7 @@ export default function Projects() {
                     className={submitted && isEmpty(form.fecha_inicio) ? "error-input" : ""}
                 />
 
-                <input
+                <Input
                     label="End Date"
                     type="date"
                     name="fecha_fin"
@@ -274,7 +274,7 @@ export default function Projects() {
                     className={submitted && isEmpty(form.fecha_fin) ? "error-input" : ""}
                 />
 
-                <input
+                <Input
                     label="Budget"
                     name="presupuesto"
                     placeholder="Budget"
