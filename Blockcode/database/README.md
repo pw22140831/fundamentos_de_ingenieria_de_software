@@ -293,7 +293,15 @@ Este valor es configurado desde el backend usando JWT autenticado.
 
 ---
 
-## 08_permissions.sql
+## 08_indexes.sql
+
+### Propósito
+
+Genera indíces en ciertas tablas para hacer más eficientes consultas que serían comunes en un ambiente ed producción.
+
+---
+
+## 09_permissions.sql
 
 ### Propósito
 
@@ -327,6 +335,14 @@ En producción:
 * restringir IPs
 * evitar privilegios excesivos
 * usar SSL/TLS
+
+---
+
+## 10_validation.sql
+
+### Propósito
+
+Hace selects para reflejar la cantidad de objetos de base de datos creados, una validación para comprobar manualmente que no se están haciendo modificaciones fuera de los scripts.
 
 ---
 
