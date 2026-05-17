@@ -17,12 +17,14 @@ SELECT
 FROM inventario i
 INNER JOIN proyectos p
 ON i.id_proyecto = p.id_proyecto
+WHERE i.is_active = TRUE
 ORDER BY i.id_inventario ASC
 ";
 
 $stmt = $conn->prepare($query);
 $stmt->execute();
 
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-echo json_encode($data);
+echo json_encode(
+    $stmt->fetchAll(PDO::FETCH_ASSOC)
+);
+?>
