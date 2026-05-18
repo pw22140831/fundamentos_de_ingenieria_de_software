@@ -23,11 +23,11 @@ export default function Transaccion() {
 
     const proyecto = location.state?.proyecto;
     const currentUser = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
-    : {
-        id_usuario: 1,
-        nombre: "Usuario Demo"
-    };
+        ? JSON.parse(localStorage.getItem("user"))
+        : {
+            id_usuario: 1,
+            nombre: "Usuario Demo"
+        };
 
     const [transactions, setTransactions] = useState([]);
 
@@ -471,13 +471,44 @@ export default function Transaccion() {
                     }
                 />
 
-                <Input
-                    label="Provider ID"
-                    name="id_proveedor"
-                    placeholder="Provider"
-                    value={form.id_proveedor}
-                    onChange={handleChange}
-                />
+                <div className="provider-select-container">
+
+                    <label className="provider-label">
+                        Provider
+                    </label>
+                    <select
+                        name="id_proveedor"
+                        value={form.id_proveedor}
+                        onChange={handleChange}
+                        className="provider-select"
+                    >
+                        <option value="">
+                            Select provider (optional)
+                        </option>
+
+                        <option value="1">
+                            1 - Materiales del Bajío SA
+                        </option>
+
+                        <option value="2">
+                            2 - Acero Industrial MX
+                        </option>
+
+                        <option value="3">
+                            3 - Concretos Premium
+                        </option>
+
+                        <option value="4">
+                            4 - Equipos Pesados Querétaro
+                        </option>
+
+                        <option value="5">
+                            5 - Suministros El Constructor
+                        </option>
+
+                    </select>
+
+                </div>
 
                 <Input
                     label="Amount"
@@ -537,17 +568,14 @@ export default function Transaccion() {
             {/* MODAL */}
             {showConfirm && (
                 <ConfirmModal
-                    text={`¿Seguro que deseas ${
-                        actionType === "create"
-                            ? "crear"
-                            : actionType === "update"
-                                ? "actualizar"
-                                : "eliminar"
-                    } la transacción "${
-                        actionData?.tipo || form.tipo
-                    }" del proyecto "${
-                        proyecto?.nombre || "Proyecto"
-                    }"?`}
+                    text={`¿Seguro que deseas ${actionType === "create"
+                        ? "crear"
+                        : actionType === "update"
+                            ? "actualizar"
+                            : "eliminar"
+                        } la transacción "${actionData?.tipo || form.tipo
+                        }" del proyecto "${proyecto?.nombre || "Proyecto"
+                        }"?`}
                     onConfirm={handleConfirm}
                     onCancel={() => setShowConfirm(false)}
                 />
