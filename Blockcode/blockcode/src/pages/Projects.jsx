@@ -13,11 +13,19 @@ import Loading from "../components/Loading";
 import ConfirmModal from "../components/ConfirmModal";
 import Table from "../components/Table";
 import { buildMessage } from "../utils/messageBuilder";
+import { useNavigate } from "react-router-dom";
 
 import "./Projects.css";
 
 export default function Projects() {
-
+    const navigate = useNavigate();
+    const handleManage = (project) => {
+        navigate(`/dashboard/transactions/${project.id_proyecto}`, {
+            state: {
+                proyecto: project
+            }
+        });
+    };
     const [projects, setProjects] = useState([]);
 
     const [form, setForm] = useState({
@@ -239,6 +247,12 @@ export default function Projects() {
     ];
 
     const actions = [
+        {
+            label: 'Manage',
+            className: 'btn-manage',
+            onClick: handleManage
+        },
+
         {
             label: 'Edit',
             className: 'btn-edit',
