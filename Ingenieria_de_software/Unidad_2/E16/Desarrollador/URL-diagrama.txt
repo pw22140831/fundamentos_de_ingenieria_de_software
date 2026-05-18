@@ -1,0 +1,65 @@
+//www.plantuml.com/plantuml/png/XPD1JiCm44NtFeNLVQ-0IXk1iaEKhX2B8J6L8R4ZswbK4AVY25mCctYgIMovcqWpyxup_ylUM0V6ZNt7d7ITu9M4eu4UU2luJlU3La8vOVcW3T_109Qn0PeFE0g-2hM7b3EwWrQR5VzYd3_NNc3Uu3CSSR0Z6AbVE5X-g5aO4m4Xx8HOOUAy4oP3FnXz5esBkA_UVLLKF1bG5ff6UYUJAdQSxnILjJfvxxX-BBKvNrlm98Glui_sup1qyeghH-7ZTL4n5OJ_NaQ-5-OalQ6ODvRXfDksbqfQPw2Hlpyg6_34YwNqNbY7ccpCrtNbi7FwGimvl11m3YVHyZkfG3KUr3HcL2KPXx6LJfjBpAIJZJNCKouVPPujnvTgYl4bU3c-W8KKMd3m2jR7i0rVhwZ0BxyARBLbx53pzVfcyL2n6zqb0seZ7QOF2qVfwy59-ahOVAK0pMvxiXlT6A7idai726Vsdlj1C7KnCuVOqXBnYGWZZYuE0uBsw8pSDMgC8CdrMgu-znEGYnbAp2vHz57w3HBvNHcQ-fzKM_H6MuiJiJrR5Pku7UsnZL3js7T_
+
+@startuml
+title Diagrama de Componentes por Capas
+
+package "Capa Controlador" {
+  [Interfaz de Usuario] as UI
+
+  [Controlador de Usuarios] as UserController
+  [Controlador de Proyectos] as ProjectController
+  [Controlador de Transacciones] as TransactionController
+  [Controlador de Inventario] as InventoryController
+  [Controlador de Proveedores] as SupplierController
+  [Controlador de Reportes] as ReportController
+}
+
+package "Capa Servicio" {
+  [Servicio de Administración de Usuarios] as UserService
+  [Servicio de Gestión de Proyectos] as ProjectService
+  [Servicio de Gestión de Transacciones] as TransactionService
+  [Servicio de Inventario] as InventoryService
+  [Servicio de Proveedores] as SupplierService
+  [Servicio de Reportes Financieros] as ReportService
+}
+
+package "Capa Repositorio" {
+  [Repositorio de Usuarios] as UserRepo
+  [Repositorio de Proyectos] as ProjectRepo
+  [Repositorio de Transacciones] as TransactionRepo
+  [Repositorio de Inventario] as InventoryRepo
+  [Repositorio de Proveedores] as SupplierRepo
+}
+
+database "Base de Datos" as DB
+
+UI --> UserController
+UI --> ProjectController
+UI --> TransactionController
+UI --> InventoryController
+UI --> SupplierController
+UI --> ReportController
+
+UserController --> UserService
+ProjectController --> ProjectService
+TransactionController --> TransactionService
+InventoryController --> InventoryService
+SupplierController --> SupplierService
+ReportController --> ReportService
+
+UserService --> UserRepo
+ProjectService --> ProjectRepo
+TransactionService --> TransactionRepo
+InventoryService --> InventoryRepo
+SupplierService --> SupplierRepo
+
+ReportService --> TransactionRepo
+ReportService --> ProjectRepo
+
+UserRepo --> DB
+ProjectRepo --> DB
+TransactionRepo --> DB
+InventoryRepo --> DB
+SupplierRepo --> DB
+
+@enduml
