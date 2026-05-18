@@ -14,6 +14,13 @@ class TransaccionesScreen extends StatefulWidget {
 class _TransaccionesScreenState extends State<TransaccionesScreen> {
   final TransaccionService _service = TransaccionService();
 
+  void _showError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
   void _abrirFormulario({Map<String, dynamic>? transaccion}) {
     final isEdit = transaccion != null;
     
@@ -57,6 +64,20 @@ class _TransaccionesScreenState extends State<TransaccionesScreen> {
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () async {
+              final tipo = tipoCtrl.text.trim();
+              final descripcion = descCtrl.text.trim();
+              final monto = double.tryParse(montoCtrl.text.trim());
+              final proveedorText = provCtrl.text.trim();
+
+              if (tipo.isEmpty || descripcion.isEmpty || monto == null || monto < 0) {
+                _showError('Revisa los datos: tipo y descripcion obligatorios, monto valido >= 0.');
+                return;
+              }
+
+              if (proveedorText.isNotEmpty && int.tryParse(proveedorText) == null) {
+                _showError('ID Proveedor invalido. Debe ser numero entero.');
+                return;
+              }
               
               final auth = AuthService();
               final user = await auth.getUser();
@@ -65,30 +86,31 @@ class _TransaccionesScreenState extends State<TransaccionesScreen> {
               final data = {
                 "id_proyecto": widget.proyecto['id_proyecto'],
                 "id_usuario": idUsuario,
-                "id_proveedor": provCtrl.text.isEmpty ? null : int.tryParse(provCtrl.text),
-                "tipo": tipoCtrl.text,
-                "monto": double.tryParse(montoCtrl.text) ?? 0.0,
+                "id_proveedor": proveedorText.isEmpty ? null : int.parse(proveedorText),
+                "tipo": tipo,
+                "monto": monto,
                 "fecha": DateTime.now().toIso8601String().split('T')[0], 
-                "descripcion": descCtrl.text,
+                "descripcion": descripcion,
               };
 
               if (isEdit) {
                 data["id_transaccion"] = transaccion["id_transaccion"];
               }
 
-              final ok = isEdit 
-                  ? await _service.updateTransaccion(data) 
-                  : await _service.saveTransaccion(data);
+              try {
+                if (isEdit) {
+                  await _service.updateTransaccion(data);
+                } else {
+                  await _service.saveTransaccion(data);
+                }
 
-              if (ok) {
-                setState(() {}); 
+                setState(() {});
                 if (!context.mounted) return;
                 Navigator.pop(context);
-              } else {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Error al guardar la transacción')),
-                );
+              } catch (e) {
+                final msg = 'Error al guardar transaccion: $e';
+                debugPrint(msg);
+                _showError(msg);
               }
             },
             child: const Text('Guardar'),
@@ -147,8 +169,14 @@ class _TransaccionesScreenState extends State<TransaccionesScreen> {
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        await _service.deleteTransaccion(int.parse(t['id_transaccion'].toString()));
-                        setState(() {});
+                        try {
+                          await _service.deleteTransaccion(int.parse(t['id_transaccion'].toString()));
+                          setState(() {});
+                        } catch (e) {
+                          final msg = 'Error al eliminar transaccion: $e';
+                          debugPrint(msg);
+                          _showError(msg);
+                        }
                       },
                     ),
                   ],

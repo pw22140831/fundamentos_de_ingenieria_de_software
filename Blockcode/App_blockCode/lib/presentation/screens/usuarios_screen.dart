@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blockcode/services/usuario_service.dart';
+import 'package:blockcode/services/auth_service.dart';
 
 class UsuariosScreen extends StatefulWidget {
   const UsuariosScreen({super.key});
@@ -9,6 +10,30 @@ class UsuariosScreen extends StatefulWidget {
 
 class _UsuariosScreenState extends State<UsuariosScreen> {
   final UsuarioService _service = UsuarioService();
+  final AuthService _authService = AuthService();
+  bool _isCheckingRole = true;
+  bool _canAccess = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAdminAccess();
+  }
+
+  bool _isAdmin(Map<String, dynamic>? user) {
+    final rol = user?['rol']?.toString().toLowerCase() ?? '';
+    final idRol = int.tryParse(user?['id_rol']?.toString() ?? '');
+    return rol.contains('admin') || idRol == 1;
+  }
+
+  Future<void> _checkAdminAccess() async {
+    final user = await _authService.getUser();
+    if (!mounted) return;
+    setState(() {
+      _canAccess = _isAdmin(user);
+      _isCheckingRole = false;
+    });
+  }
 
   void _abrirFormulario({Map<String, dynamic>? usuario}) {
     final isEdit = usuario != null;
@@ -69,6 +94,21 @@ class _UsuariosScreenState extends State<UsuariosScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isCheckingRole) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (!_canAccess) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Usuarios')),
+        body: const Center(
+          child: Text('Acceso denegado: solo administradores.'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Usuarios')),
       body: FutureBuilder<List<dynamic>>(

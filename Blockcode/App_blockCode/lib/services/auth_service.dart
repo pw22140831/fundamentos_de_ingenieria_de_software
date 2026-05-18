@@ -12,11 +12,12 @@ class AuthService {
   Future<Map<String, dynamic>> login(String correo, String password) async {
     if (correo == _localAdminEmail && password == _localAdminPassword) {
       const localUser = {
-        'id_usuario': 0,
+        'id_usuario': 1,
         'nombre': 'Admin',
         'apellido_paterno': 'Local',
         'apellido_materno': '',
         'correo': _localAdminEmail,
+        'id_rol': 1,
         'rol': 'Administrador',
         'activo': true,
       };

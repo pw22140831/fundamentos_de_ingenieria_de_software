@@ -6,12 +6,24 @@ import 'proyectos_screen.dart';
 import 'usuarios_screen.dart';
 import 'inventario_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final AuthService _authService = AuthService();
+
+  bool _isAdmin(Map<String, dynamic>? user) {
+    final rol = user?['rol']?.toString().toLowerCase() ?? '';
+    final idRol = int.tryParse(user?['id_rol']?.toString() ?? '');
+    return rol.contains('admin') || idRol == 1;
+  }
+
   void _logout(BuildContext context) async {
-    final authService = AuthService();
-    await authService.logout();
+    await _authService.logout();
     if (!context.mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
@@ -22,72 +34,81 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Panel Principal'),
-        leading: IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: () => _logout(context),
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                '¿Qué deseas gestionar?',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 48),
-              
-              
-              ElevatedButton.icon(
-                icon: const Icon(Icons.apartment),
-                label: const Text('PROYECTOS', style: TextStyle(fontSize: 16)),
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ProyectosScreen()),
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
-              
-              
-              ElevatedButton.icon(
-                icon: const Icon(Icons.people),
-                label: const Text('USUARIOS', style: TextStyle(fontSize: 16)),
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const UsuariosScreen()),
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: _authService.getUser(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-              
-              ElevatedButton.icon(
-                icon: const Icon(Icons.inventory_2),
-                label: const Text('INVENTARIO', style: TextStyle(fontSize: 16)),
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const InventarioScreen()),
-                  );
-                },
-              ),
-            ],
+        final canSeeUsers = _isAdmin(snapshot.data);
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Panel Principal'),
+            leading: IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () => _logout(context),
+            ),
           ),
-        ),
-      ),
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    '¿Qué deseas gestionar?',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 48),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.apartment),
+                    label: const Text('PROYECTOS', style: TextStyle(fontSize: 16)),
+                    style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ProyectosScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  if (canSeeUsers) ...[
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.people),
+                      label: const Text('USUARIOS', style: TextStyle(fontSize: 16)),
+                      style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const UsuariosScreen()),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.inventory_2),
+                    label: const Text('INVENTARIO', style: TextStyle(fontSize: 16)),
+                    style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const InventarioScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
