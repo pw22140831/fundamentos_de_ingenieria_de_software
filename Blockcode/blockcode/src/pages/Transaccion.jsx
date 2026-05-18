@@ -8,6 +8,7 @@ import {
 } from "../config/config";
 
 import Input from "../components/Input";
+import Select from "../components/Select";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
 import ConfirmModal from "../components/ConfirmModal";
@@ -471,44 +472,38 @@ export default function Transaccion() {
                     }
                 />
 
-                <div className="provider-select-container">
+                <Select
+                    label="Provider"
+                    name="id_proveedor"
+                    value={form.id_proveedor}
+                    onChange={handleChange}
+                    className="provider-select"
+                >
+                    <option value="">
+                        Select provider (optional)
+                    </option>
 
-                    <label className="provider-label">
-                        Provider
-                    </label>
-                    <select
-                        name="id_proveedor"
-                        value={form.id_proveedor}
-                        onChange={handleChange}
-                        className="provider-select"
-                    >
-                        <option value="">
-                            Select provider (optional)
-                        </option>
+                    <option value="1">
+                        1 - Materiales del Bajío SA
+                    </option>
 
-                        <option value="1">
-                            1 - Materiales del Bajío SA
-                        </option>
+                    <option value="2">
+                        2 - Acero Industrial MX
+                    </option>
 
-                        <option value="2">
-                            2 - Acero Industrial MX
-                        </option>
+                    <option value="3">
+                        3 - Concretos Premium
+                    </option>
 
-                        <option value="3">
-                            3 - Concretos Premium
-                        </option>
+                    <option value="4">
+                        4 - Equipos Pesados Querétaro
+                    </option>
 
-                        <option value="4">
-                            4 - Equipos Pesados Querétaro
-                        </option>
+                    <option value="5">
+                        5 - Suministros El Constructor
+                    </option>
 
-                        <option value="5">
-                            5 - Suministros El Constructor
-                        </option>
-
-                    </select>
-
-                </div>
+                </Select>
 
                 <Input
                     label="Amount"
