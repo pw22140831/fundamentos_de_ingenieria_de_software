@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blockcode/services/inventario_service.dart';
+// auth_service not needed here because access-check is performed at caller (HomeScreen)
 
 class InventarioScreen extends StatefulWidget {
   const InventarioScreen({super.key});
@@ -62,6 +63,7 @@ class _InventarioScreenState extends State<InventarioScreen> {
               final cantidad = int.tryParse(cantidadCtrl.text.trim());
 
               if (idProyecto == null || cantidad == null || recursoCtrl.text.trim().isEmpty) {
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Completa los campos correctamente.')),
                 );
@@ -79,9 +81,7 @@ class _InventarioScreenState extends State<InventarioScreen> {
                 data['id_inventario'] = item['id_inventario'];
               }
 
-              final ok = isEdit
-                  ? await _service.updateInventario(data)
-                  : await _service.saveInventario(data);
+              final ok = isEdit ? await _service.updateInventario(data) : await _service.saveInventario(data);
 
               if (!context.mounted) return;
 

@@ -18,7 +18,8 @@ class UsuarioProyectoService {
   Future<List<dynamic>> getAssignments() async {
     try {
       final headers = await _getHeaders();
-      final resp = await http.get(Uri.parse('$baseUrl/index.php'), headers: headers);
+    final resp = await http.get(Uri.parse('$baseUrl/index.php'), headers: headers)
+      .timeout(const Duration(seconds: 10));
       if (resp.statusCode == 200) {
         final data = json.decode(resp.body);
         if (data is List<dynamic>) return data;
@@ -34,7 +35,7 @@ class UsuarioProyectoService {
         Uri.parse('$baseUrl/save.php'),
         headers: headers,
         body: json.encode(data),
-      );
+      ).timeout(const Duration(seconds: 10));
       if (resp.statusCode == 200) return true;
     } catch (_) {}
     return _saveLocalAssignment(data);
@@ -47,7 +48,7 @@ class UsuarioProyectoService {
         Uri.parse('$baseUrl/update.php'),
         headers: headers,
         body: json.encode(data),
-      );
+      ).timeout(const Duration(seconds: 10));
       if (resp.statusCode == 200) return true;
     } catch (_) {}
     return _updateLocalAssignment(data);
@@ -60,7 +61,7 @@ class UsuarioProyectoService {
         Uri.parse('$baseUrl/delete.php'),
         headers: headers,
         body: json.encode({'id_usuario_proyecto': id}),
-      );
+      ).timeout(const Duration(seconds: 10));
       if (resp.statusCode == 200) return true;
     } catch (_) {}
     return _deleteLocalAssignment(id);

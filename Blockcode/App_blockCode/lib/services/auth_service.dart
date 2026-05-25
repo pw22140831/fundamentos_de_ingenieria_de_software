@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   static const String baseUrl = 'https://app.blockcode.site/api/v1/auth';
@@ -44,6 +45,8 @@ class AuthService {
         }),
       );
 
+      debugPrint('AuthService.login: HTTP ${resp.statusCode}');
+
       if (resp.statusCode == 200) {
         final data = json.decode(resp.body) as Map<String, dynamic>;
 
@@ -86,6 +89,7 @@ class AuthService {
 
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
+    debugPrint('AuthService.getToken: reading prefs');
     return prefs.getString(_tokenKey);
   }
 

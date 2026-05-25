@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blockcode/services/proyecto_service.dart';
+import 'package:blockcode/services/usuario_proyecto_service.dart';
+import 'package:blockcode/services/auth_service.dart';
 import 'package:blockcode/presentation/screens/transacciones_screen.dart';
 
 class ProyectosScreen extends StatefulWidget {
@@ -11,6 +13,46 @@ class ProyectosScreen extends StatefulWidget {
 
 class _ProyectosScreenState extends State<ProyectosScreen> {
   final ProyectoService _service = ProyectoService();
+  final UsuarioProyectoService _assignmentService = UsuarioProyectoService();
+  final AuthService _authService = AuthService();
+  List<dynamic> _assignments = [];
+  Map<String, dynamic>? _currentUser;
+  Set<String> _userProjectIds = {};
+
+  bool _isAdmin(Map<String, dynamic>? user) {
+    final rol = user?['rol']?.toString().toLowerCase() ?? '';
+    final idRol = int.tryParse(user?['id_rol']?.toString() ?? '');
+    return rol.contains('admin') || idRol == 1;
+  }
+
+  Future<List<dynamic>> _loadProjectsForUser() async {
+    // Load all projects and current user and assignments, then filter if needed.
+    final projects = await _service.getProyectos();
+    final user = await _authService.getUser();
+
+  // Load and cache assignments for showing counts/details
+  final assignments = await _assignmentService.getAssignments();
+  _assignments = assignments;
+  _currentUser = user;
+
+    if (_isAdmin(user)) {
+      return projects;
+    }
+
+    // Non-admin: filter projects by assigned project id
+    final userId = user?['id_usuario']?.toString();
+    if (userId == null) return [];
+
+  final assignedProjectIds = assignments
+        .where((a) => a['id_usuario']?.toString() == userId)
+        .map((a) => a['id_proyecto']?.toString())
+        .whereType<String>()
+        .toSet();
+
+  _userProjectIds = assignedProjectIds;
+
+    return projects.where((p) => assignedProjectIds.contains(p['id_proyecto']?.toString())).toList();
+  }
 
   void _mostrarFormulario({Map<String, dynamic>? proyecto}) {
     final nombreCtrl = TextEditingController(text: proyecto?['nombre']);
@@ -95,7 +137,7 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Proyectos')),
       body: FutureBuilder<List<dynamic>>(
-        future: _service.getProyectos(),
+        future: _loadProjectsForUser(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -113,10 +155,54 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
               final p = data[i];
               return ListTile(
                 title: Text(p['nombre']),
-                subtitle: Text("Responsable: ${p['responsable']}"),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Responsable: ${p['responsable']}"),
+                    const SizedBox(height: 4),
+                    Builder(builder: (context) {
+                      final projectId = p['id_proyecto']?.toString();
+                      final count = _assignments.where((a) => a['id_proyecto']?.toString() == projectId).length;
+                      return Text('Asignados: $count');
+                    }),
+                  ],
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    IconButton(
+                      icon: const Icon(Icons.group, color: Colors.orange),
+                      tooltip: 'Ver asignados',
+                      onPressed: () {
+                        final projectId = p['id_proyecto']?.toString();
+                        final assigned = _assignments.where((a) => a['id_proyecto']?.toString() == projectId).toList();
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Asignados - ${p['nombre']}'),
+                            content: SizedBox(
+                              width: double.maxFinite,
+                              child: assigned.isEmpty
+                                  ? const Text('No hay usuarios asignados.')
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: assigned.length,
+                                      itemBuilder: (context, idx) {
+                                        final a = assigned[idx];
+                                        return ListTile(
+                                          title: Text(a['usuario']?.toString() ?? a['nombre_usuario']?.toString() ?? 'Usuario'),
+                                          subtitle: Text('ID: ${a['id_usuario'] ?? ''}'),
+                                        );
+                                      },
+                                    ),
+                            ),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cerrar')),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                     
                     IconButton(
                       icon: const Icon(Icons.list_alt, color: Colors.green),
@@ -131,19 +217,38 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
                       },
                     ),
                     
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () => _mostrarFormulario(proyecto: p),
-                    ),
-                    
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () async {
-                        await _service
-                            .deleteProyecto(int.parse(p['id_proyecto'].toString()));
-                        setState(() {});
-                      },
-                    ),
+                    // Role based: admin (id_rol==1) can edit/delete; operator (id_rol==2) can edit/delete for assigned projects; worker (id_rol==3) cannot.
+                    Builder(builder: (context) {
+                      final user = _currentUser;
+                      final idRol = int.tryParse(user?['id_rol']?.toString() ?? '0') ?? 0;
+                      final isAdmin = idRol == 1;
+                      final isOperator = idRol == 2;
+                      
+                      final projectId = p['id_proyecto']?.toString();
+                      final operatorCanModify = isOperator && _userProjectIds.contains(projectId);
+
+                      if (isAdmin || operatorCanModify) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () => _mostrarFormulario(proyecto: p),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () async {
+                                await _service.deleteProyecto(int.parse(p['id_proyecto'].toString()));
+                                setState(() {});
+                              },
+                            ),
+                          ],
+                        );
+                      }
+
+                      // Workers: no edit/delete buttons
+                      return const SizedBox.shrink();
+                    }),
                   ],
                 ),
               );
@@ -151,10 +256,17 @@ class _ProyectosScreenState extends State<ProyectosScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _mostrarFormulario(),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: Builder(builder: (context) {
+        final user = _currentUser;
+        final idRol = int.tryParse(user?['id_rol']?.toString() ?? '0') ?? 0;
+        final isAdmin = idRol == 1;
+        // Operators should NOT create new projects globally (per your rules)
+        if (!isAdmin) return const SizedBox.shrink();
+        return FloatingActionButton(
+          onPressed: () => _mostrarFormulario(),
+          child: const Icon(Icons.add),
+        );
+      }),
     );
   }
 }
