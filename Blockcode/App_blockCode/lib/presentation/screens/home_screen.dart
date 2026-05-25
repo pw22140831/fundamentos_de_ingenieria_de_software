@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:blockcode/features/auth/screens/login_screen.dart';
 import 'package:blockcode/services/auth_service.dart';
 
+import 'admin_panel_screen.dart';
 import 'proyectos_screen.dart';
 import 'usuarios_screen.dart';
 import 'inventario_screen.dart';
@@ -79,6 +80,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 24),
                   if (canSeeUsers) ...[
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.admin_panel_settings),
+                      label: const Text('PANEL ADMIN', style: TextStyle(fontSize: 16)),
+                      style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AdminPanelScreen()),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 24),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.people),
                       label: const Text('USUARIOS', style: TextStyle(fontSize: 16)),
