@@ -19,7 +19,8 @@ class ProyectoService {
   Future<List<dynamic>> getProyectos() async {
     try {
       final headers = await _getHeaders();
-      final resp = await http.get(Uri.parse('$baseUrl/index.php'), headers: headers);
+    final resp = await http.get(Uri.parse('$baseUrl/index.php'), headers: headers)
+      .timeout(const Duration(seconds: 10));
       
       if (resp.statusCode == 200) {
         final data = json.decode(resp.body);
@@ -38,7 +39,7 @@ class ProyectoService {
       Uri.parse('$baseUrl/save.php'),
       headers: headers,
       body: json.encode(data),
-    );
+    ).timeout(const Duration(seconds: 10));
     return resp.statusCode == 200;
   }
 
@@ -48,7 +49,7 @@ class ProyectoService {
       Uri.parse('$baseUrl/update.php'),
       headers: headers,
       body: json.encode(data),
-    );
+    ).timeout(const Duration(seconds: 10));
     return resp.statusCode == 200;
   }
 
@@ -58,7 +59,7 @@ class ProyectoService {
       Uri.parse('$baseUrl/delete.php'),
       headers: headers,
       body: json.encode({"id_proyecto": id}),
-    );
+    ).timeout(const Duration(seconds: 10));
     return resp.statusCode == 200;
   }
 }

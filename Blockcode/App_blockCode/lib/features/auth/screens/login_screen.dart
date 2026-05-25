@@ -13,30 +13,33 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authService = AuthService();
-  
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
-  void _iniciarSesion() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
+  Future<void> _iniciarSesion() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      final correo = _emailController.text.trim();
-      final password = _passwordController.text;
+    setState(() => _isLoading = true);
 
+    final correo = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    try {
+      // Corregido: _authService en lugar de _auth_service
       final result = await _authService.login(correo, password);
 
       if (!mounted) return;
-      setState(() => _isLoading = false);
 
       if (result['success'] == true) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute<void>(
             builder: (context) => const LoadingScreen(
-              message: 'Entrando...',
               nextScreen: HomeScreen(),
+              message: 'Entrando...',
             ),
           ),
         );
@@ -48,6 +51,13 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error de red: $e'), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -60,78 +70,77 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0), 
-          child: Form(
-            key: _formKey,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'blockcode',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2.0,
-                  ),
+                  style: theme.textTheme.titleLarge?.copyWith(letterSpacing: 2),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 12),
 
-                
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Correo',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor ingresa tu correo';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
+                Card(
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextFormField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: const InputDecoration(labelText: 'Correo', prefixIcon: Icon(Icons.email)),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) return 'Por favor ingresa tu correo';
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
 
-                
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true, 
-                  decoration: const InputDecoration(
-                    labelText: 'Contraseña',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor ingresa tu contraseña';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 32),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: _obscurePassword,
+                            decoration: InputDecoration(
+                              labelText: 'Contraseña',
+                              prefixIcon: const Icon(Icons.lock),
+                              suffixIcon: IconButton(
+                                icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) return 'Por favor ingresa tu contraseña';
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 24),
 
-                
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _iniciarSesion,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                          ElevatedButton(
+                            onPressed: _isLoading ? null : _iniciarSesion,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            child: _isLoading
+                                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                : const Text('ENTRAR', style: TextStyle(fontSize: 16)),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                      ),
+                    ),
                   ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text(
-                          'ENTRAR',
-                          style: TextStyle(fontSize: 16),
-                        ),
                 ),
               ],
             ),

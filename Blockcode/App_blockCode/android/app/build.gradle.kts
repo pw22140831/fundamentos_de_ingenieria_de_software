@@ -15,13 +15,35 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
+// Determine whether a full keystore configuration is available.
+val hasKeystore = keystorePropertiesFile.exists() &&
+        keystoreProperties.getProperty("keyAlias") != null &&
+        keystoreProperties.getProperty("keyPassword") != null &&
+        keystoreProperties.getProperty("storeFile") != null &&
+        keystoreProperties.getProperty("storePassword") != null
+
 android {
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = file(keystoreProperties["storeFile"] as String)
-            storePassword = keystoreProperties["storePassword"] as String
+            // Only load signing info if the key.properties file exists and contains values.
+            if (keystorePropertiesFile.exists()) {
+                val alias = keystoreProperties.getProperty("keyAlias")
+                val password = keystoreProperties.getProperty("keyPassword")
+                val store = keystoreProperties.getProperty("storeFile")
+                val storePwd = keystoreProperties.getProperty("storePassword")
+
+                if (alias != null && password != null && store != null && storePwd != null) {
+                    keyAlias = alias
+                    keyPassword = password
+                    storeFile = file(store)
+                    storePassword = storePwd
+                } else {
+                    // Fall back to debug signing if any property is missing.
+                    println("WARNING: key.properties is missing required values; release signing will not be configured.")
+                }
+            } else {
+                println("INFO: key.properties not found; release signing skipped.")
+            }
         }
     }
     // Using the desired application package/namespace for this project.
@@ -56,7 +78,12 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("release")
+            if (hasKeystore) {
+                signingConfig = signingConfigs.getByName("release")
+            } else {
+                println("INFO: Release keystore not configured; using debug signing for release build.")
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
     }
 }

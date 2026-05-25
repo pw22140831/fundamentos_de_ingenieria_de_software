@@ -38,7 +38,8 @@ class TransaccionService {
   Future<List<dynamic>> getTransaccionesPorProyecto(int idProyecto) async {
     try {
       final headers = await _getHeaders();
-      final resp = await http.get(Uri.parse('$baseUrl/index.php'), headers: headers);
+    final resp = await http.get(Uri.parse('$baseUrl/index.php'), headers: headers)
+      .timeout(const Duration(seconds: 10));
       
       if (resp.statusCode == 200) {
         final data = json.decode(resp.body);
@@ -60,7 +61,7 @@ class TransaccionService {
       Uri.parse('$baseUrl/save.php'),
       headers: headers,
       body: json.encode(data),
-    );
+    ).timeout(const Duration(seconds: 10));
     if (resp.statusCode != 200) {
       throw Exception(_extractErrorMessage(resp));
     }
@@ -72,7 +73,7 @@ class TransaccionService {
       Uri.parse('$baseUrl/update.php'),
       headers: headers,
       body: json.encode(data),
-    );
+    ).timeout(const Duration(seconds: 10));
     if (resp.statusCode != 200) {
       throw Exception(_extractErrorMessage(resp));
     }
@@ -84,7 +85,7 @@ class TransaccionService {
       Uri.parse('$baseUrl/delete.php'),
       headers: headers,
       body: json.encode({"id_transaccion": id}),
-    );
+    ).timeout(const Duration(seconds: 10));
     if (resp.statusCode != 200) {
       throw Exception(_extractErrorMessage(resp));
     }
