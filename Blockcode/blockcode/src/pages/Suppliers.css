@@ -1,0 +1,175 @@
+/* CONTENEDOR GENERAL */
+.suppliers-container {
+  width: 90%;
+  margin: 30px auto;
+  text-align: center;
+}
+
+/* TÍTULO */
+.suppliers-container h2 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+/* ========================= */
+/* FORMULARIO */
+/* ========================= */
+
+.supplier-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: nowrap;
+}
+
+.supplier-form input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 180px;
+  font-size: 1rem;
+}
+
+.supplier-form input:focus {
+  outline: none;
+  border-color: royalblue;
+}
+
+/* ========================= */
+/* BOTONES FORM */
+/* ========================= */
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-create {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: royalblue;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-create:hover {
+  background-color: navy;
+}
+
+/* ========================= */
+/* TABLA */
+/* ========================= */
+
+.suppliers-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+/* HEADER */
+.suppliers-table thead {
+  background-color: rgba(18, 36, 64, 0.95);
+  color: white;
+}
+
+/* BODY */
+.suppliers-table tbody {
+  background-color: #22375b;
+}
+
+/* CELDAS */
+.suppliers-table th,
+.suppliers-table td {
+  padding: 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  text-align: center;
+}
+
+/* ========================= */
+/* BOTONES ACCIONES */
+/* ========================= */
+
+.btn-edit {
+  background-color: darkgreen;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-edit:hover {
+  background-color: darkgreen;
+}
+
+.btn-delete {
+  background-color: crimson;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background-color: darkred;
+}
+
+/* ========================= */
+/* MENSAJES */
+/* ========================= */
+
+.message-box {
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.message-box.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.message-box.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* INPUT ERROR */
+
+.error-input {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .supplier-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .supplier-form input {
+    width: 90%;
+  }
+
+  .suppliers-table {
+    font-size: 0.9rem;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+}

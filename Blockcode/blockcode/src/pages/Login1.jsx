@@ -245,8 +245,7 @@ export default function Login() {
                 <main className="App-main">
                     <section className="login-card">
                         <div className="login-head">
-                            <h2>Accede a tu cuenta</h2>
-                            <p>Inicia sesión con un diseño moderno y seguro.</p>
+                            <h2>Access your account</h2>
                         </div>
 
                         {message && (
@@ -261,7 +260,7 @@ export default function Login() {
                             onSubmit={handleSubmit}
                         >
                             <Input
-                                label="Correo"
+                                label="Email"
                                 type="email"
                                 name="user"
                                 value={inputs.user}
@@ -269,7 +268,7 @@ export default function Login() {
                             />
 
                             <Input
-                                label="Contraseña"
+                                label="Password"
                                 type="password"
                                 name="password"
                                 value={inputs.password}
@@ -277,7 +276,7 @@ export default function Login() {
                             />
 
                             <Button
-                                text="Iniciar sesión"
+                                text="Sign in"
                                 type="submit"
                                 className="btn-login"
                             />

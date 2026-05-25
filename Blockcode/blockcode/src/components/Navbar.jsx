@@ -37,6 +37,13 @@ export default function Navbar() {
                 Inventory
             </NavLink>
 
+            <NavLink
+                to="/dashboard/suppliers"
+                className="nav-link"
+            >
+                Suppliers
+            </NavLink>
+
             {(isAdmin || isOperador) && (
 
                 <NavLink
