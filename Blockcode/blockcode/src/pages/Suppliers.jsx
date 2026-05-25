@@ -46,9 +46,9 @@ export default function Suppliers() {
         localStorage.getItem("user")
     );
 
-    const canManage =
-    user?.role === "admin" ||
-    user?.role === "operador";
+    const canManage = true;
+   // user?.role === "admin" ||
+   // user?.role === "operador";
 
     // =====================
     // LOAD
