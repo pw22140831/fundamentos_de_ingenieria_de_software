@@ -149,71 +149,167 @@ export default function Projects() {
 
         setLoading(true);
 
-        // CREATE
-        if (actionType === "create") {
+        try {
 
-            if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/proyectos/save.php`, actionData,
-                    {
-                        headers: {
-                            Authorization: 'Bearer ' + localStorage.getItem("token"),
+            // =====================
+            // CREATE
+            // =====================
+            if (actionType === "create") {
+
+                if (USE_BACKEND) {
+
+                    await axios.post(
+                        `${API_BASE}/proyectos/save.php`,
+                        actionData,
+                        {
+                            headers: {
+                                Authorization:
+                                    'Bearer ' +
+                                    localStorage.getItem("token"),
+                            }
                         }
-                    }
+                    );
+
+                } else {
+
+                    setProjects([
+                        ...projects,
+                        {
+                            ...actionData,
+                            id_proyecto: Date.now()
+                        }
+                    ]);
+
+                }
+
+                showMessage(
+                    buildMessage(
+                        "Proyecto",
+                        actionData.nombre,
+                        "creado"
+                    ),
+                    "success"
                 );
-            } else {
-                setProjects([
-                    ...projects,
-                    { ...actionData, id_proyecto: Date.now() }
-                ]);
+
+                resetForm();
             }
 
-            showMessage(buildMessage("Proyecto", actionData.nombre, "creado"), "success");
-            resetForm();
-        }
+            // =====================
+            // UPDATE
+            // =====================
+            if (actionType === "update") {
 
-        // UPDATE
-        if (actionType === "update") {
+                if (USE_BACKEND) {
 
+                    await axios.post(
+                        `${API_BASE}/proyectos/update.php`,
+                        actionData,
+                        {
+                            headers: {
+                                Authorization:
+                                    'Bearer ' +
+                                    localStorage.getItem("token"),
+                            }
+                        }
+                    );
+
+                } else {
+
+                    setProjects(
+                        projects.map(p =>
+                            p.id_proyecto === actionData.id_proyecto
+                                ? actionData
+                                : p
+                        )
+                    );
+
+                }
+
+                showMessage(
+                    buildMessage(
+                        "Proyecto",
+                        actionData.nombre,
+                        "actualizado"
+                    ),
+                    "success"
+                );
+
+                resetForm();
+            }
+
+            // =====================
+            // DELETE
+            // =====================
+            if (actionType === "delete") {
+
+                if (USE_BACKEND) {
+
+                    await axios.post(
+                        `${API_BASE}/proyectos/delete.php`,
+                        {
+                            id_proyecto:
+                                actionData.id_proyecto
+                        },
+                        {
+                            headers: {
+                                Authorization:
+                                    'Bearer ' +
+                                    localStorage.getItem("token"),
+                            }
+                        }
+                    );
+
+                } else {
+
+                    setProjects(
+                        projects.filter(
+                            p =>
+                                p.id_proyecto !==
+                                actionData.id_proyecto
+                        )
+                    );
+
+                }
+
+                showMessage(
+                    buildMessage(
+                        "Proyecto",
+                        actionData.nombre,
+                        "eliminado"
+                    ),
+                    "success"
+                );
+
+                resetForm();
+            }
+
+            // =====================
+            // RECARGAR PROYECTOS
+            // =====================
             if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/proyectos/update.php`, actionData, {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem("token"),
-                    }
-                });
-            } else {
-                setProjects(projects.map(p =>
-                    p.id_proyecto === actionData.id_proyecto
-                        ? actionData
-                        : p
-                ));
+
+                const res = await axios.get(
+                    `${API_BASE}/proyectos/index.php`
+                );
+
+                setProjects(res.data);
+
             }
 
-            showMessage(buildMessage("Proyecto", actionData.nombre, "actualizado"), "success");
-            resetForm();
-        }
+        } catch (error) {
 
-        // DELETE
-        if (actionType === "delete") {
+            console.log(error);
 
-            if (USE_BACKEND) {
-                await axios.post(`${API_BASE}/proyectos/delete.php`, {
-                    id_proyecto: actionData.id_proyecto
-                }, {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem("token"),
-                    }
-                });
-            } else {
-                setProjects(projects.filter(p => p.id_proyecto !== actionData.id_proyecto));
-            }
+            showMessage(
+                "Error procesando proyecto",
+                "error"
+            );
 
-            showMessage(buildMessage("Proyecto", actionData.nombre, "eliminado"), "success");
         }
 
         setShowConfirm(false);
         setLoading(false);
     };
-
     // =====================
     // RESET
     // =====================
