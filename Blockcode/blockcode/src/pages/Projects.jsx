@@ -348,6 +348,14 @@ export default function Projects() {
             className: 'btn-manage',
             onClick: handleManage
         },
+        {
+            label: 'Dashboard',
+            className: 'btn-dashboard',
+            onClick: (project) =>
+                navigate(
+                    `/dashboard/projects/${project.id_proyecto}/dashboard`
+                )
+        },
 
         {
             label: 'Edit',
@@ -359,6 +367,7 @@ export default function Projects() {
             className: 'btn-delete',
             onClick: handleDeleteClick
         }
+
     ];
 
     return (

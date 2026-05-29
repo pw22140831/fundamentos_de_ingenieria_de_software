@@ -6,6 +6,7 @@ import Projects from "../pages/Projects";
 import Inventory from "../pages/Inventory";
 import Transacciones from "../pages/Transaccion";
 import Suppliers from "../pages/Suppliers";
+import ProjectDashboard from "../pages/ProjectDashboard";
 
 export default function AppRoutes() {
     return (
@@ -19,9 +20,13 @@ export default function AppRoutes() {
                 <Route path="/dashboard" element={<Layout />}>
                     <Route path="users" element={<Users />} />
                     <Route path="projects" element={<Projects />} />
-                    <Route path="inventory" element={<Inventory />}/>
+                    <Route path="inventory" element={<Inventory />} />
                     <Route path="transactions/:id" element={<Transacciones />} />
                     <Route path="suppliers" element={<Suppliers />} />
+                    <Route
+                        path="projects/:id/dashboard"
+                        element={<ProjectDashboard />}
+                    />
                 </Route>
 
             </Routes>
