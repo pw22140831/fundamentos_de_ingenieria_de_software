@@ -1,18 +1,36 @@
 describe('Login Blockcode', () => {
 
-  it('Inicia sesión correctamente', () => {
+    it('Inicia sesión correctamente', () => {
 
-    cy.visit('https://app.blockcode.site/')
+        cy.visit('https://app.blockcode.site/')
 
-    cy.get('input[type="email"]')
-      .type('admin@admin.com')
+        cy.get('input[type="email"]')
+            .type('admin@admin.com')
 
-    cy.get('input[type="password"]')
-      .type('1234@abc')
+        cy.get('input[type="password"]')
+            .type('1234@abc')
 
-    cy.contains('Sign in')
-      .click()
+        cy.contains('Sign in')
+            .click()
 
-  })
+    })
+
+})
+describe('Login Blockcode', () => {
+
+    it('Login fallido', () => {
+
+        cy.visit('https://app.blockcode.site/')
+
+        cy.get('input[type="email"]')
+            .type('admin@admin.com')
+
+        cy.get('input[type="password"]')
+            .type('fakeee')
+
+        cy.contains('Sign in')
+            .click()
+
+    })
 
 })

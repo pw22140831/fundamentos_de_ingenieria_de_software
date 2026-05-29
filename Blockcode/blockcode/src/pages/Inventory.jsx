@@ -102,7 +102,7 @@ export default function Inventory() {
         ) {
 
             showMessage(
-                "Faltan datos obligatorios",
+                "mandatory data missing",
                 "error"
             );
 
@@ -150,7 +150,7 @@ export default function Inventory() {
                     console.error(error);
 
                     showMessage(
-                        "Error cargando inventario",
+                        "error loading the inventory",
                         "error"
                     );
                 })
@@ -304,9 +304,9 @@ export default function Inventory() {
 
                 showMessage(
                     buildMessage(
-                        "Inventario",
+                        "Inventory",
                         actionData.nombre_recurso,
-                        "creado"
+                        "created"
                     ),
                     "success"
                 );
@@ -368,9 +368,9 @@ export default function Inventory() {
 
 showMessage(
     buildMessage(
-        "Inventario",
+        "Inventory",
         actionData.nombre_recurso,
-        "actualizado"
+        "updated"
     ),
     "success"
 );
@@ -414,9 +414,9 @@ if (actionType === "delete") {
 
     showMessage(
         buildMessage(
-            "Inventario",
+            "Inventory",
             actionData.nombre_recurso,
-            "eliminado"
+            "deleted"
         ),
         "success"
     );
@@ -427,7 +427,7 @@ if (actionType === "delete") {
     console.error(error);
 
     showMessage(
-        "Error en la operación",
+        "Error loading the inventory",
         "error"
     );
 

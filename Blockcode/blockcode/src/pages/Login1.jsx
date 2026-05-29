@@ -100,7 +100,7 @@ export default function Login() {
                     );
 
                     showMessage(
-                        "Login correcto",
+                        "Correct Login",
                         "success"
                     );
 
@@ -142,7 +142,7 @@ export default function Login() {
                 console.error(error);
 
                 showMessage(
-                    "Error de conexión",
+                    "Error loading the inventory",
                     "error"
                 );
             }
@@ -171,7 +171,7 @@ export default function Login() {
             );
 
             showMessage(
-                "Login correcto",
+                "Correct Login",
                 "success"
             );
 
@@ -197,7 +197,7 @@ export default function Login() {
             );
 
             showMessage(
-                "Login correcto",
+                "Correct Login",
                 "success"
             );
 
@@ -223,7 +223,7 @@ export default function Login() {
             );
 
             showMessage(
-                "Login correcto",
+                "Correct Login",
                 "success"
             );
 
@@ -234,7 +234,7 @@ export default function Login() {
 
         // ERROR
         showMessage(
-            "Credenciales incorrectas",
+            "Incorrect credentials",
             "error"
         );
     }

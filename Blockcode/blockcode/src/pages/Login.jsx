@@ -81,7 +81,7 @@ export default function Login() {
             navigate("/dashboard/projects");
 
         } else {
-            showMessage("Credenciales incorrectas", "error");
+            showMessage("Incorrect credentials", "error");
         }
     };
 

@@ -75,7 +75,7 @@ export default function Projects() {
             !form.fecha_fin ||
             !form.presupuesto
         ) {
-            showMessage("Faltan datos obligatorios", "error");
+            showMessage("Mandatory data is missing", "error");
             return false;
         }
         return true;
@@ -184,9 +184,9 @@ export default function Projects() {
 
                 showMessage(
                     buildMessage(
-                        "Proyecto",
+                        "Project",
                         actionData.nombre,
-                        "creado"
+                        "created"
                     ),
                     "success"
                 );
@@ -227,9 +227,9 @@ export default function Projects() {
 
                 showMessage(
                     buildMessage(
-                        "Proyecto",
+                        "Project",
                         actionData.nombre,
-                        "actualizado"
+                        "updated"
                     ),
                     "success"
                 );
@@ -273,9 +273,9 @@ export default function Projects() {
 
                 showMessage(
                     buildMessage(
-                        "Proyecto",
+                        "Project",
                         actionData.nombre,
-                        "eliminado"
+                        "deleted"
                     ),
                     "success"
                 );
@@ -301,7 +301,7 @@ export default function Projects() {
             console.log(error);
 
             showMessage(
-                "Error procesando proyecto",
+                "Error processing project",
                 "error"
             );
 
@@ -429,12 +429,12 @@ export default function Projects() {
             {/* MODAL */}
             {showConfirm && (
                 <ConfirmModal
-                    text={`¿Seguro que deseas ${actionType === "create"
-                        ? "crear"
+                    text={`Are you sure you want to ${actionType === "create"
+                        ? "create"
                         : actionType === "update"
-                            ? "actualizar"
-                            : "eliminar"
-                        } el proyecto "${actionData?.nombre}"?`}
+                            ? "update"
+                            : "delete"
+                        } the project "${actionData?.nombre}"?`}
                     onConfirm={handleConfirm}
                     onCancel={() => setShowConfirm(false)}
                 />
